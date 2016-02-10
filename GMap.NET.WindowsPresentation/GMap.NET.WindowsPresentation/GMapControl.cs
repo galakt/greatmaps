@@ -79,10 +79,6 @@ namespace GMap.NET.WindowsPresentation
 
       private void OnOverlaysPropChanged(DependencyPropertyChangedEventArgs e)
       {
-         //var overlay = e.NewValue as GMapOverlay;
-         //if (overlay == null)
-         //   return;
-         //overlay.Control = this;
       }
 
       /// <summary>
@@ -616,9 +612,14 @@ namespace GMap.NET.WindowsPresentation
 
       private void OverlaysOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
       {
+         foreach (GMapOverlay item in notifyCollectionChangedEventArgs.OldItems)
+         {
+            item.MapControl = null;
+         }
+
          foreach (GMapOverlay item in notifyCollectionChangedEventArgs.NewItems)
          {
-            item.Control = this;
+            item.MapControl = this;
          }
       }
 

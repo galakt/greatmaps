@@ -13,18 +13,20 @@ namespace GMap.NET.WindowsPresentation
    {
       public GMapOverlay()
       {
+         CreateEvents();
       }
 
       public GMapOverlay(string overlayId)
       {
          OverlayId = overlayId;
+         CreateEvents();
       }
 
       private bool _isVisible;
 
       public string OverlayId { get; set; }
       
-      //todo: Must make thread safe
+      //todo: Must make thread safe!
       /// <summary>
       /// List of markers, should be thread safe
       /// </summary>
@@ -47,23 +49,25 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      public GMapControl Control { get; set; }
+      public GMapControl MapControl { get; set; }
       
       private void OnIsVisibleChanged()
       {
+         if (MapControl == null)
+            return;
          //todo: delete or make invisible
          if (IsVisible)
          {
             foreach (var mapMarker in Markers)
             {
-               Control.Markers.Add(mapMarker);
+               MapControl.Markers.Add(mapMarker);
             }      
          }
          else
          {
             foreach (var mapMarker in Markers)
             {
-               Control.Markers.Remove(mapMarker);
+               MapControl.Markers.Remove(mapMarker);
             }
          }
       }
@@ -89,19 +93,16 @@ namespace GMap.NET.WindowsPresentation
       {
          if (!IsVisible)
             return;
-         if (e.Action == NotifyCollectionChangedAction.Add)
+         if (MapControl == null)
+            return;
+
+         foreach (GMapMarker item in e.OldItems)
          {
-            foreach (GMapMarker item in e.NewItems)
-            {
-               Control.Markers.Add(item);
-            }
-         }
-         else if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Reset)
+            MapControl.Markers.Remove(item);
+         };
+         foreach (GMapMarker item in e.NewItems)
          {
-            foreach (GMapMarker item in e.OldItems)
-            {
-               Control.Markers.Remove(item);
-            }
+            MapControl.Markers.Add(item);
          }
       }
 
@@ -140,7 +141,7 @@ namespace GMap.NET.WindowsPresentation
          {
             disposed = true;
 
-            //ClearEvents();
+            ClearEvents();
 
             //foreach (var m in Markers)
             //{
