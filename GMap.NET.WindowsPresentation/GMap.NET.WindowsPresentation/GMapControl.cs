@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -51,6 +52,38 @@ namespace GMap.NET.WindowsPresentation
       public static readonly DependencyProperty MapProviderProperty = DependencyProperty.Register("MapProvider",
          typeof (GMapProvider), typeof (GMapControl),
          new UIPropertyMetadata(EmptyProvider.Instance, new PropertyChangedCallback(MapProviderPropertyChanged)));
+
+      private static readonly DependencyPropertyKey OverlaysKey
+         = DependencyProperty.RegisterReadOnly("Overlays", typeof (ObservableCollection<GMapOverlay>),
+            typeof (GMapControl),
+            new FrameworkPropertyMetadata(null,
+               FrameworkPropertyMetadataOptions.None,
+               OnOverlaysPropChanged));
+
+      public static readonly DependencyProperty OverlaysKeyProperty
+         = OverlaysKey.DependencyProperty;
+
+      /// <summary>
+      /// Collection of overlays
+      /// </summary>
+      public ObservableCollection<GMapOverlay> Overlays
+      {
+         get { return (ObservableCollection<GMapOverlay>)GetValue(OverlaysKeyProperty); }
+         private set { SetValue(OverlaysKey, value); }
+      }
+
+      private static void OnOverlaysPropChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+      {
+         ((GMapControl)d).OnOverlaysPropChanged(e);
+      }
+
+      private void OnOverlaysPropChanged(DependencyPropertyChangedEventArgs e)
+      {
+         //var overlay = e.NewValue as GMapOverlay;
+         //if (overlay == null)
+         //   return;
+         //overlay.Control = this;
+      }
 
       /// <summary>
       /// type of map
@@ -555,6 +588,7 @@ namespace GMap.NET.WindowsPresentation
             #endregion
 
             Markers = new ObservableCollection<GMapMarker>();
+            Overlays = new ObservableCollection<GMapOverlay>();
 
             ClipToBounds = true;
             SnapsToDevicePixels = true;
@@ -563,6 +597,7 @@ namespace GMap.NET.WindowsPresentation
 
             Core.RenderMode = GMap.NET.RenderMode.WPF;
 
+            Overlays.CollectionChanged += OverlaysOnCollectionChanged;
             Core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
             Core.OnCurrentPositionChanged += CoreOnCurrentPositionChanged;
             Loaded += new RoutedEventHandler(GMapControl_Loaded);
@@ -576,6 +611,14 @@ namespace GMap.NET.WindowsPresentation
             }
 
             Core.Zoom = (int) ((double) ZoomProperty.DefaultMetadata.DefaultValue);
+         }
+      }
+
+      private void OverlaysOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+      {
+         foreach (GMapOverlay item in notifyCollectionChangedEventArgs.NewItems)
+         {
+            item.Control = this;
          }
       }
 
