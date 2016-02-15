@@ -978,8 +978,8 @@ namespace GMap.NET.WindowsPresentation
 
                            g.DrawText(EmptyTileText,
                               new System.Windows.Point(
-                                 Core.tileRect.X + Core.tileRect.Width/2 - EmptyTileText.Width/2,
-                                 Core.tileRect.Y + Core.tileRect.Height/2 - EmptyTileText.Height/2));
+                                 Core.tileRect.X + (double)Core.tileRect.Width/2 - EmptyTileText.Width/2,
+                                 Core.tileRect.Y + (double)Core.tileRect.Height/2 - EmptyTileText.Height/2));
                         }
                      }
                   }
@@ -997,8 +997,8 @@ namespace GMap.NET.WindowsPresentation
                         TileText.MaxTextWidth = Core.tileRect.Width;
                         g.DrawText(TileText,
                            new System.Windows.Point(
-                              Core.tileRect.X + Core.tileRect.Width/2 - EmptyTileText.Width/2,
-                              Core.tileRect.Y + Core.tileRect.Height/2 - TileText.Height/2));
+                              Core.tileRect.X + (double)Core.tileRect.Width/2 - EmptyTileText.Width/2,
+                              Core.tileRect.Y + (double)Core.tileRect.Height/2 - TileText.Height/2));
                      }
                      else
                      {
@@ -1008,8 +1008,8 @@ namespace GMap.NET.WindowsPresentation
                         TileText.MaxTextWidth = Core.tileRect.Width;
                         g.DrawText(TileText,
                            new System.Windows.Point(
-                              Core.tileRect.X + Core.tileRect.Width/2 - EmptyTileText.Width/2,
-                              Core.tileRect.Y + Core.tileRect.Height/2 - TileText.Height/2));
+                              Core.tileRect.X + (double)Core.tileRect.Width/2 - EmptyTileText.Width/2,
+                              Core.tileRect.Y + (double)Core.tileRect.Height/2 - TileText.Height/2));
                      }
                   }
                }
@@ -1518,7 +1518,7 @@ namespace GMap.NET.WindowsPresentation
             if (SelectionUseCircle)
             {
                drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen,
-                  new System.Windows.Point(x1 + (x2 - x1)/2, y1 + (y2 - y1)/2), (x2 - x1)/2, (y2 - y1)/2);
+                  new System.Windows.Point(x1 + (x2 - x1)/2, y1 + (y2 - y1)/2), ((double)x2 - x1)/2, ((double)y2 - y1)/2);
             }
             else
             {
