@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows;
 
 namespace GMap.NET.WindowsPresentation
 {
@@ -22,9 +23,10 @@ namespace GMap.NET.WindowsPresentation
          CreateEvents();
       }
 
-      private bool _isVisible;
+      private bool _isActive;
 
       public string OverlayId { get; set; }
+      public string OverlayName { get; set; }
       
       //todo: Must make thread safe!
       /// <summary>
@@ -39,36 +41,69 @@ namespace GMap.NET.WindowsPresentation
       /// List of polygons, should be thread safe
       /// </summary>
       public readonly ObservableCollection<GMapPolygon> Polygons = new ObservableCollection<GMapPolygon>();
-      public bool IsVisible
+      /// <summary>
+      /// Enable layer to show on map
+      /// </summary>
+      public bool IsActive
       {
-         get { return _isVisible; }
+         get { return _isActive; }
          set
          {
-            _isVisible = value;
-            OnIsVisibleChanged();
+            _isActive = value;
+            OnIsActiveChanged();
          }
       }
 
-      public GMapControl MapControl { get; set; }
+      /// <summary>
+      /// Allow hide layer`s elements if current map zoom more MaxLayerZoomLvl or map zoom less MinLayerZoomLvl
+      /// </summary>
+      public bool AllowChangeVisibilityOnZoom { get; set; }
+      public int MaxLayerZoomLvl { get; set; }
+      public int MinLayerZoomLvl { get; set; }
+
+      internal bool HidenByZoomValidation
+      {
+         get
+         {
+            if (!AllowChangeVisibilityOnZoom)
+               return false;
+            return MinLayerZoomLvl > MapControl.Zoom || MapControl.Zoom > MaxLayerZoomLvl;
+         }
+      }
+
+      internal GMapControl MapControl { get; set; }
       
-      private void OnIsVisibleChanged()
+      private void OnIsActiveChanged()
       {
          if (MapControl == null)
             return;
-         //todo: delete or make invisible
-         if (IsVisible)
+
+         if (IsActive)
          {
-            foreach (var mapMarker in Markers)
-            {
-               MapControl.Markers.Add(mapMarker);
-            }      
+            ShowLayerMarkers();
          }
          else
          {
-            foreach (var mapMarker in Markers)
-            {
-               MapControl.Markers.Remove(mapMarker);
-            }
+            HideLayerMarkers();
+         }
+      }
+
+      //todo: delete or make invisible
+      internal void HideLayerMarkers()
+      {
+         foreach (var mapMarker in Markers)
+         {
+            MapControl.Markers.Remove(mapMarker);
+         }
+      }
+
+      internal void ShowLayerMarkers()
+      {
+         //todo: it can be too slow on large collections!
+         foreach (var mapMarker in Markers)
+         {
+            if (!MapControl.Markers.Contains(mapMarker))
+               MapControl.Markers.Add(mapMarker);
          }
       }
 
@@ -91,18 +126,25 @@ namespace GMap.NET.WindowsPresentation
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         if (!IsVisible)
+         if (!IsActive)
             return;
          if (MapControl == null)
             return;
 
-         foreach (GMapMarker item in e.OldItems)
+         if (e.OldItems != null)
          {
-            MapControl.Markers.Remove(item);
-         };
-         foreach (GMapMarker item in e.NewItems)
+            foreach (GMapMarker item in e.OldItems)
+            {
+               MapControl.Markers.Remove(item);
+            }
+         }
+
+         if (e.NewItems != null)
          {
-            MapControl.Markers.Add(item);
+            foreach (GMapMarker item in e.NewItems)
+            {
+               MapControl.Markers.Add(item);
+            }
          }
       }
 

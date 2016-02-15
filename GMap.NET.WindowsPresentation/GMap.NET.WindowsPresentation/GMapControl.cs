@@ -256,8 +256,28 @@ namespace GMap.NET.WindowsPresentation
 
             if (map.IsLoaded)
             {
+               map.ValidateLayerMinMaxZoom();
                map.ForceUpdateOverlays();
                map.InvalidateVisual(true);
+            }
+         }  
+      }
+
+      private void ValidateLayerMinMaxZoom()
+      {
+         foreach (var gMapOverlay in Overlays)
+         {
+            if (!gMapOverlay.IsActive)
+               continue;
+            Debug.WriteLine(
+               $"Overlay name={gMapOverlay.OverlayName}, HidenByZoomValidation={gMapOverlay.HidenByZoomValidation}");
+            if (gMapOverlay.HidenByZoomValidation)
+            {
+               gMapOverlay.HideLayerMarkers();
+            }
+            else
+            {
+               gMapOverlay.ShowLayerMarkers();
             }
          }
       }
@@ -612,14 +632,20 @@ namespace GMap.NET.WindowsPresentation
 
       private void OverlaysOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
       {
-         foreach (GMapOverlay item in notifyCollectionChangedEventArgs.OldItems)
+         if (notifyCollectionChangedEventArgs.OldItems != null)
          {
-            item.MapControl = null;
+            foreach (GMapOverlay item in notifyCollectionChangedEventArgs.OldItems)
+            {
+               item.MapControl = null;
+            }
          }
 
-         foreach (GMapOverlay item in notifyCollectionChangedEventArgs.NewItems)
+         if (notifyCollectionChangedEventArgs.NewItems != null)
          {
-            item.MapControl = this;
+            foreach (GMapOverlay item in notifyCollectionChangedEventArgs.NewItems)
+            {
+               item.MapControl = this;
+            }
          }
       }
 
@@ -770,6 +796,8 @@ namespace GMap.NET.WindowsPresentation
       {
          using (Dispatcher.DisableProcessing())
          {
+            Debug.WriteLine("ForceUpdateOverlays");
+
             UpdateMarkersOffset();
 
             foreach (GMapMarker i in items)
