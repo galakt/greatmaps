@@ -344,7 +344,7 @@ namespace GMap.NET.MapProviders
 
                            if(baseTileUrl.Contains("{key}") || baseTileUrl.Contains("{token}"))
                            {
-                              baseTileUrl.Replace("{key}", SessionId).Replace("{token}", SessionId);
+                              baseTileUrl = baseTileUrl.Replace("{key}", SessionId).Replace("{token}", SessionId);
                            }
                            else if(ForceSessionIdOnTileAccess)
                            {
