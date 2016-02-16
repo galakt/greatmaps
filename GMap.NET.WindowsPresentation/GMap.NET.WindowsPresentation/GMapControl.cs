@@ -258,6 +258,9 @@ namespace GMap.NET.WindowsPresentation
          set { Core.fillEmptyTiles = value; }
       }
 
+      public PointLatLng SelectionStart { get { return selectionStart; } }
+      public PointLatLng SelectionEnd { get { return selectionEnd; } }
+
       /// <summary>
       /// max zoom
       /// </summary>         
@@ -338,10 +341,10 @@ namespace GMap.NET.WindowsPresentation
       [Category("GMap.NET")] public MouseButton DragButton = MouseButton.Right;
 
       /// <summary>
-      /// use circle for selection
+      /// Figure for selection
       /// </summary>
-      public bool SelectionUseCircle = false;
-
+      public GMapSelectionFigureEnum SelectionFigure;
+      
       /// <summary>
       /// shows tile gridlines
       /// </summary>
@@ -1443,15 +1446,23 @@ namespace GMap.NET.WindowsPresentation
             long x2 = p2.X;
             long y2 = p2.Y;
 
-            if (SelectionUseCircle)
+            switch (SelectionFigure)
             {
-               drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen,
-                  new System.Windows.Point(x1 + (x2 - x1)/2, y1 + (y2 - y1)/2), (x2 - x1)/2, (y2 - y1)/2);
-            }
-            else
-            {
-               drawingContext.DrawRoundedRectangle(SelectedAreaFill, SelectionPen,
-                  new Rect(x1, y1, x2 - x1, y2 - y1), 5, 5);
+               case GMapSelectionFigureEnum.Ellipse:
+                  drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen,
+                     new System.Windows.Point(x1 + (x2 - x1)/2, y1 + (y2 - y1)/2), ((double)x2 - x1)/2, ((double)y2 - y1)/2);
+                  break;
+               case GMapSelectionFigureEnum.Circle:
+                  GPoint cp1 = FromLatLngToLocal(selectionStart);
+                  GPoint cp2 = FromLatLngToLocal(selectionEnd);
+                  //((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)) < d*d
+                  double radius = Math.Sqrt((cp1.X - cp2.X) * (cp1.X - cp2.X) + (cp1.Y - cp2.Y) * (cp1.Y - cp2.Y));
+                  drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen, new Point(cp1.X, cp1.Y), radius, radius);
+                  break;
+               case GMapSelectionFigureEnum.Rectangle:
+                  drawingContext.DrawRoundedRectangle(SelectedAreaFill, SelectionPen,
+                     new Rect(x1, y1, x2 - x1, y2 - y1), 5, 5);
+                  break;
             }
          }
 
