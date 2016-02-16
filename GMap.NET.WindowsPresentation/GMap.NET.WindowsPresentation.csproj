@@ -75,6 +75,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="GMap.NET.WindowsPresentation\GMapMarker.cs" />
+    <Compile Include="GMap.NET.WindowsPresentation\GMapOverlay.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapPolygon.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapRoute.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapImage.cs" />

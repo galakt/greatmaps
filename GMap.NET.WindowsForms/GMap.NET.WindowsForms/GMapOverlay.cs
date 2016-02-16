@@ -17,7 +17,7 @@ namespace GMap.NET.WindowsForms
    public class GMapOverlay: IDisposable
 #endif
    {
-      bool isVisibile = true;
+      private bool _isVisibile = true;
 
       /// <summary>
       /// is overlay visible
@@ -26,17 +26,17 @@ namespace GMap.NET.WindowsForms
       {
          get
          {
-            return isVisibile;
+            return _isVisibile;
          }
          set
          {
-            if(value != isVisibile)
+            if(value != _isVisibile)
             {
-               isVisibile = value;
+               _isVisibile = value;
 
                if(Control != null)
                {
-                  if(isVisibile)
+                  if(_isVisibile)
                   {
                      Control.HoldInvalidation = true;
                      {
