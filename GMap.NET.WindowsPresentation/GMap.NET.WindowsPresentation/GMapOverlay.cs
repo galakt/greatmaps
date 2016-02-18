@@ -90,6 +90,10 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
+            if (MapControl == null)
+            {
+               return true;
+            }
             if (!AllowZoomLvlVisibilityValidation)
             {
                return false;
