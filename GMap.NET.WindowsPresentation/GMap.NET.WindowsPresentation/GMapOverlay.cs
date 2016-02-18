@@ -53,31 +53,53 @@ namespace GMap.NET.WindowsPresentation
             OnIsActiveChanged();
          }
       }
-
       /// <summary>
       /// Allow hide layer`s elements if current map zoom more MaxLayerZoomLvl or map zoom less MinLayerZoomLvl
       /// </summary>
-      public bool AllowChangeVisibilityOnZoom { get; set; }
+      public bool AllowZoomLvlVisibilityValidation { get; set; }
       public int MaxLayerZoomLvl { get; set; }
       public int MinLayerZoomLvl { get; set; }
-
-      internal bool HidenByZoomValidation
+      public int ZIndex { get; set; }
+      internal GMapControl MapControl
       {
-         get
+         get { return _mapControl; }
+         set
          {
-            if (!AllowChangeVisibilityOnZoom)
-               return false;
-            return MinLayerZoomLvl > MapControl.Zoom || MapControl.Zoom > MaxLayerZoomLvl;
+            _mapControl = value;
+            OnMapControlChanged();
          }
       }
 
-      internal GMapControl MapControl { get; set; }
-      
-      private void OnIsActiveChanged()
+      protected virtual void OnMapControlChanged()
       {
          if (MapControl == null)
+         {
             return;
+         }
 
+         foreach (var layersMarker in Markers)
+         {
+            if (!MapControl.Markers.Contains(layersMarker))
+            {
+               MapControl.Markers.Add(layersMarker);
+            }
+         }
+      }
+
+      public bool HidenByZoomValidation
+      {
+         get
+         {
+            if (!AllowZoomLvlVisibilityValidation)
+            {
+               return false;
+            }
+            return MinLayerZoomLvl > MapControl.Zoom || MapControl.Zoom > MaxLayerZoomLvl;
+         }
+      }
+      
+      protected virtual void OnIsActiveChanged()
+      {
          if (IsActive)
          {
             ShowLayerMarkers();
@@ -88,12 +110,11 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      //todo: delete or make invisible
       internal void HideLayerMarkers()
       {
          foreach (var mapMarker in Markers)
          {
-            MapControl.Markers.Remove(mapMarker);
+            ProcessMarkerVisibility(mapMarker);
          }
       }
 
@@ -102,8 +123,28 @@ namespace GMap.NET.WindowsPresentation
          //todo: it can be too slow on large collections!
          foreach (var mapMarker in Markers)
          {
-            if (!MapControl.Markers.Contains(mapMarker))
+            ProcessMarkerVisibility(mapMarker);
+            if (MapControl != null && !MapControl.Markers.Contains(mapMarker))
+            {
                MapControl.Markers.Add(mapMarker);
+            }
+         }
+      }
+
+      private void ProcessMarkerVisibility(GMapMarker mapMarker)
+      {
+         if (mapMarker.Shape == null)
+         {
+            return;
+         }
+
+         if (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation)
+         {
+            mapMarker.Shape.Visibility = Visibility.Visible;
+         }
+         else
+         {
+            mapMarker.Shape.Visibility = Visibility.Collapsed;
          }
       }
 
@@ -126,12 +167,7 @@ namespace GMap.NET.WindowsPresentation
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         if (!IsActive)
-            return;
-         if (MapControl == null)
-            return;
-
-         if (e.OldItems != null)
+         if (e.OldItems != null && MapControl != null)
          {
             foreach (GMapMarker item in e.OldItems)
             {
@@ -143,7 +179,15 @@ namespace GMap.NET.WindowsPresentation
          {
             foreach (GMapMarker item in e.NewItems)
             {
-               MapControl.Markers.Add(item);
+               if (item.ZIndex == default(int))
+               {
+                  item.ZIndex = ZIndex;
+               }
+               ProcessMarkerVisibility(item);
+               if (MapControl != null && !MapControl.Markers.Contains(item))
+               {
+                  MapControl.Markers.Add(item);
+               }
             }
          }
       }
@@ -176,6 +220,7 @@ namespace GMap.NET.WindowsPresentation
       #region IDisposable Members
 
       bool disposed = false;
+      private GMapControl _mapControl;
 
       public void Dispose()
       {
