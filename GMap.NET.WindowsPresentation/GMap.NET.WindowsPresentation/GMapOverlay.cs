@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -142,7 +143,7 @@ namespace GMap.NET.WindowsPresentation
             return;
          }
 
-         if (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation)
+         if (IsActive && (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation))
          {
             mapMarker.Shape.Visibility = Visibility.Visible;
          }
