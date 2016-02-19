@@ -81,6 +81,7 @@
     <Compile Include="GMap.NET.WindowsPresentation\GMapImage.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapControl.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapSelectionFigureEnum.cs" />
+    <Compile Include="Interfaces\IShapable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

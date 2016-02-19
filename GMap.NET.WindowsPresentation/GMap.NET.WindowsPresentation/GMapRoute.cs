@@ -1,14 +1,9 @@
-﻿
+﻿using GMap.NET.WindowsPresentation.Interfaces;
+using System.Collections.Generic;
+using System.Windows.Shapes;
+
 namespace GMap.NET.WindowsPresentation
 {
-    using System.Collections.Generic;
-    using System.Windows.Shapes;
-
-    public interface IShapable
-    {
-        void RegenerateShape(GMapControl map);
-    }
-
     public class GMapRoute : GMapMarker, IShapable
     {
         public readonly List<PointLatLng> Points = new List<PointLatLng>();
@@ -16,7 +11,6 @@ namespace GMap.NET.WindowsPresentation
         public GMapRoute(IEnumerable<PointLatLng> points)
         {
             Points.AddRange(points);
-            RegenerateShape(null);
         }
         
         public override void Clear()
@@ -26,7 +20,7 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        /// regenerates shape of route
+        /// Regenerates shape of route
         /// </summary>
         public virtual void RegenerateShape(GMapControl map)
         {

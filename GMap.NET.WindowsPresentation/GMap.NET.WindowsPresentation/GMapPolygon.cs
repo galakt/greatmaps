@@ -1,9 +1,9 @@
-﻿
+﻿using GMap.NET.WindowsPresentation.Interfaces;
+using System.Collections.Generic;
+using System.Windows.Shapes;
+
 namespace GMap.NET.WindowsPresentation
 {
-    using System.Collections.Generic;
-    using System.Windows.Shapes;
-
     public class GMapPolygon : GMapMarker, IShapable
     {
         public readonly List<PointLatLng> Points = new List<PointLatLng>();
@@ -11,7 +11,6 @@ namespace GMap.NET.WindowsPresentation
         public GMapPolygon(IEnumerable<PointLatLng> points)
         {
             Points.AddRange(points);
-            RegenerateShape(null);
         }
         
         public override void Clear()

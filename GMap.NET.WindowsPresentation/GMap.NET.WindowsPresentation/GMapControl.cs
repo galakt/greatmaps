@@ -19,6 +19,7 @@ using GMap.NET.Internals;
 using System.Diagnostics;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
+using GMap.NET.WindowsPresentation.Interfaces;
 
 namespace GMap.NET.WindowsPresentation
 {
