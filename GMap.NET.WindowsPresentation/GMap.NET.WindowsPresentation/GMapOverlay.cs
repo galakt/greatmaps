@@ -60,6 +60,9 @@ namespace GMap.NET.WindowsPresentation
       public bool AllowZoomLvlVisibilityValidation { get; set; }
       public int MaxLayerZoomLvl { get; set; }
       public int MinLayerZoomLvl { get; set; }
+      /// <summary>
+      /// ZIndex of layer and markers on layer
+      /// </summary>
       public int ZIndex { get; set; }
       internal GMapControl MapControl
       {
@@ -83,6 +86,14 @@ namespace GMap.NET.WindowsPresentation
             if (!MapControl.Markers.Contains(layersMarker))
             {
                MapControl.Markers.Add(layersMarker);
+            }
+         }
+
+         foreach (var layerRoute in Routes)
+         {
+            if (!MapControl.Markers.Contains(layerRoute))
+            {
+               MapControl.Markers.Add(layerRoute);
             }
          }
       }
@@ -167,7 +178,34 @@ namespace GMap.NET.WindowsPresentation
 
       private void Routes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         throw new NotImplementedException();
+         Debug.WriteLine("Routes_CollectionChanged");
+
+         if (e.OldItems != null && MapControl != null)
+         {
+            foreach (GMapRoute item in e.OldItems)
+            {
+               MapControl.Markers.Remove(item);
+            }
+         }
+
+         Debug.WriteLine($"e.NewItems count={e.NewItems.Count}");
+         if (e.NewItems != null)
+         {
+            foreach (GMapRoute item in e.NewItems)
+            {
+               if (item.ZIndex == default(int))
+               {
+                  item.ZIndex = ZIndex;
+               }
+               ProcessMarkerVisibility(item);
+               Debug.WriteLine("Routes_CollectionChanged_InForeach");
+               if (MapControl != null && !MapControl.Markers.Contains(item))
+               {
+                  MapControl.Markers.Add(item);
+                  Debug.WriteLine("Routes_CollectionChanged_ItemAdded");
+               }
+            }
+         }
       }
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
