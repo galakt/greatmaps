@@ -1107,12 +1107,12 @@ namespace GMap.NET.WindowsPresentation
 
             if (addBlurEffect)
             {
-               BlurEffect ef = new BlurEffect();
+               BlurEffect ef = new BlurEffect
                {
-                  ef.KernelType = KernelType.Gaussian;
-                  ef.Radius = 3.0;
-                  ef.RenderingBias = RenderingBias.Performance;
-               }
+                  KernelType = KernelType.Gaussian,
+                  Radius = 3.0,
+                  RenderingBias = RenderingBias.Performance
+               };
 
                myPath.Effect = ef;
             }
@@ -1180,6 +1180,7 @@ namespace GMap.NET.WindowsPresentation
             }
 
             myPath.Stroke = Brushes.MidnightBlue;
+            myPath.Stroke.Freeze();
             myPath.StrokeThickness = 5;
             myPath.StrokeLineJoin = PenLineJoin.Round;
             myPath.StrokeStartLineCap = PenLineCap.Triangle;
@@ -1450,8 +1451,12 @@ namespace GMap.NET.WindowsPresentation
          if (!Core.IsStarted)
             return;
 
+         Debug.WriteLine($"OnRender, time = {DateTime.Now.ToLongTimeString()}");
+
+         // Render map background
          drawingContext.DrawRectangle(EmptyMapBackground, null, new Rect(RenderSize));
 
+         // Render map
          if (IsRotated)
          {
             drawingContext.PushTransform(rotationMatrix);
@@ -1508,7 +1513,7 @@ namespace GMap.NET.WindowsPresentation
             }
          }
 
-         // selection
+         // Render selection
          if (!SelectedArea.IsEmpty)
          {
             GPoint p1 = FromLatLngToLocal(SelectedArea.LocationTopLeft);
@@ -1539,6 +1544,7 @@ namespace GMap.NET.WindowsPresentation
             }
          }
 
+         // Render center
          if (ShowCenter)
          {
             drawingContext.DrawLine(CenterCrossPen, new System.Windows.Point((ActualWidth/2) - 5, ActualHeight/2),
@@ -1547,6 +1553,7 @@ namespace GMap.NET.WindowsPresentation
                new System.Windows.Point(ActualWidth/2, (ActualHeight/2) + 5));
          }
 
+         // Render mouse 
          if (renderHelperLine)
          {
             var p = Mouse.GetPosition(this);
@@ -1556,7 +1563,7 @@ namespace GMap.NET.WindowsPresentation
          }
 
          #region -- copyright --
-
+         // Render copyright
          if (Copyright != null)
          {
             drawingContext.DrawText(Copyright, new System.Windows.Point(5, ActualHeight - Copyright.Height - 5));

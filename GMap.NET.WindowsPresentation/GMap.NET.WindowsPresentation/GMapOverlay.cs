@@ -178,8 +178,6 @@ namespace GMap.NET.WindowsPresentation
 
       private void Routes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         Debug.WriteLine("Routes_CollectionChanged");
-
          if (e.OldItems != null && MapControl != null)
          {
             foreach (GMapRoute item in e.OldItems)
@@ -187,8 +185,7 @@ namespace GMap.NET.WindowsPresentation
                MapControl.Markers.Remove(item);
             }
          }
-
-         Debug.WriteLine($"e.NewItems count={e.NewItems.Count}");
+         
          if (e.NewItems != null)
          {
             foreach (GMapRoute item in e.NewItems)
@@ -198,11 +195,9 @@ namespace GMap.NET.WindowsPresentation
                   item.ZIndex = ZIndex;
                }
                ProcessMarkerVisibility(item);
-               Debug.WriteLine("Routes_CollectionChanged_InForeach");
                if (MapControl != null && !MapControl.Markers.Contains(item))
                {
                   MapControl.Markers.Add(item);
-                  Debug.WriteLine("Routes_CollectionChanged_ItemAdded");
                }
             }
          }
