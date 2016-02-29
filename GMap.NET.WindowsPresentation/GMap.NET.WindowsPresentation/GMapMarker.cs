@@ -1,16 +1,10 @@
-﻿
+﻿using System.ComponentModel;
+using System.Windows;
+using System.Windows.Media;
+using System;
+
 namespace GMap.NET.WindowsPresentation
 {
-   using System.Collections.Generic;
-   using System.ComponentModel;
-   using System.Windows;
-   using System.Windows.Controls;
-   using GMap.NET;
-   using System.Windows.Media;
-   using System.Diagnostics;
-   using System.Windows.Shapes;
-   using System;
-
    /// <summary>
    /// GMap.NET marker
    /// </summary>
@@ -33,7 +27,7 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      UIElement shape;
+      private UIElement _shape;
       static readonly PropertyChangedEventArgs Shape_PropertyChangedEventArgs = new PropertyChangedEventArgs("Shape");
 
       /// <summary>
@@ -43,13 +37,13 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return shape;
+            return _shape;
          }
          set
          {
-            if(shape != value)
+            if(_shape != value)
             {
-               shape = value;
+               _shape = value;
                OnPropertyChanged(Shape_PropertyChangedEventArgs);
 
                UpdateLocalPosition();
@@ -57,7 +51,7 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      private PointLatLng position;
+      private PointLatLng _position;
 
       /// <summary>
       /// coordinate of marker
@@ -66,19 +60,19 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return position;
+            return _position;
          }
          set
          {
-            if(position != value)
+            if(_position != value)
             {
-               position = value;
+               _position = value;
                UpdateLocalPosition();
             }
          }
       }
 
-      GMapControl map;
+      private GMapControl _map;
 
       /// <summary>
       /// the map of this marker
@@ -87,23 +81,20 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            if(Shape != null && map == null)
+            if (Shape != null && _map == null)
             {
                DependencyObject visual = Shape;
-               while(visual != null && !(visual is GMapControl))
+               while (visual != null && !(visual is GMapControl))
                {
                   visual = VisualTreeHelper.GetParent(visual);
                }
 
-               map = visual as GMapControl;
+               _map = visual as GMapControl;
             }
 
-            return map;
+            return _map;
          }
-          internal set
-          {
-              map = value;
-          }
+         internal set { _map = value; }
       }
 
       /// <summary>
@@ -111,7 +102,7 @@ namespace GMap.NET.WindowsPresentation
       /// </summary>
       public object Tag;
 
-      System.Windows.Point offset;
+      private System.Windows.Point _offset;
       /// <summary>
       /// offset of marker
       /// </summary>
@@ -119,19 +110,19 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return offset;
+            return _offset;
          }
          set
          {
-            if(offset != value)
+            if(_offset != value)
             {
-               offset = value;
+               _offset = value;
                UpdateLocalPosition();
             }
          }
       }
 
-      int localPositionX;
+      private int _localPositionX;
       static readonly PropertyChangedEventArgs LocalPositionX_PropertyChangedEventArgs = new PropertyChangedEventArgs("LocalPositionX");
 
       /// <summary>
@@ -141,19 +132,19 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return localPositionX;
+            return _localPositionX;
          }
          internal set
          {
-            if(localPositionX != value)
+            if(_localPositionX != value)
             {
-               localPositionX = value;
+               _localPositionX = value;
                OnPropertyChanged(LocalPositionX_PropertyChangedEventArgs);
             }
          }
       }
 
-      int localPositionY;
+      private int _localPositionY;
       static readonly PropertyChangedEventArgs LocalPositionY_PropertyChangedEventArgs = new PropertyChangedEventArgs("LocalPositionY");
 
       /// <summary>
@@ -163,19 +154,19 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return localPositionY;
+            return _localPositionY;
          }
          internal set
          {
-            if(localPositionY != value)
+            if(_localPositionY != value)
             {
-               localPositionY = value;
+               _localPositionY = value;
                OnPropertyChanged(LocalPositionY_PropertyChangedEventArgs);
             }
          }
       }
 
-      int zIndex;
+      private int _zIndex;
       static readonly PropertyChangedEventArgs ZIndex_PropertyChangedEventArgs = new PropertyChangedEventArgs("ZIndex");
 
       /// <summary>
@@ -185,17 +176,19 @@ namespace GMap.NET.WindowsPresentation
       {
          get
          {
-            return zIndex;
+            return _zIndex;
          }
          set
          {
-            if(zIndex != value)
+            if(_zIndex != value)
             {
-               zIndex = value;
+               _zIndex = value;
                OnPropertyChanged(ZIndex_PropertyChangedEventArgs);
             }
          }
       }
+
+      public bool? AllowZoomLvlVisibilityValidation { get; set; }
 
       public GMapMarker(PointLatLng pos)
       {
@@ -207,7 +200,7 @@ namespace GMap.NET.WindowsPresentation
       }
 
       /// <summary>
-      /// calls Dispose on shape if it implements IDisposable, sets shape to null and clears route
+      /// calls Dispose on _shape if it implements IDisposable, sets _shape to null and clears route
       /// </summary>
       public virtual void Clear()
       {
@@ -244,7 +237,7 @@ namespace GMap.NET.WindowsPresentation
       {
          if(m != null)
          {
-            map = m;
+            _map = m;
          }
          UpdateLocalPosition();
       }

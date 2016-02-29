@@ -154,7 +154,7 @@ namespace GMap.NET.WindowsPresentation
             return;
          }
 
-         if (IsActive && (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation))
+         if (IsActive && (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation || mapMarker.AllowZoomLvlVisibilityValidation == false))
          {
             mapMarker.Shape.Visibility = Visibility.Visible;
          }
@@ -221,6 +221,12 @@ namespace GMap.NET.WindowsPresentation
                {
                   item.ZIndex = ZIndex;
                }
+
+               if (item.AllowZoomLvlVisibilityValidation == null)
+               {
+                  item.AllowZoomLvlVisibilityValidation = AllowZoomLvlVisibilityValidation;
+               }
+
                ProcessMarkerVisibility(item);
                if (MapControl != null && !MapControl.Markers.Contains(item))
                {
