@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Windows;
 
 namespace GMap.NET.WindowsPresentation
@@ -13,18 +9,8 @@ namespace GMap.NET.WindowsPresentation
    [Serializable]
    public class GMapOverlay : ISerializable, IDeserializationCallback, IDisposable
    {
-      public GMapOverlay()
-      {
-         CreateEvents();
-      }
-
-      public GMapOverlay(string overlayId)
-      {
-         OverlayId = overlayId;
-         CreateEvents();
-      }
-
       private bool _isActive;
+      private GMapControl _mapControl;
 
       public string OverlayId { get; set; }
       public string OverlayName { get; set; }
@@ -74,6 +60,17 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
+      public GMapOverlay()
+      {
+         CreateEvents();
+      }
+
+      public GMapOverlay(string overlayId)
+      {
+         OverlayId = overlayId;
+         CreateEvents();
+      }
+
       protected virtual void OnMapControlChanged()
       {
          if (MapControl == null)
@@ -98,7 +95,10 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      public bool HidenByZoomValidation
+      /// <summary>
+      /// Is layer collapsed because of min\max zoom values
+      /// </summary>
+      public virtual bool HidenByZoomValidation
       {
          get
          {
@@ -164,7 +164,7 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      void CreateEvents()
+      private void CreateEvents()
       {
          Markers.CollectionChanged += new NotifyCollectionChangedEventHandler(Markers_CollectionChanged);
          Routes.CollectionChanged += new NotifyCollectionChangedEventHandler(Routes_CollectionChanged);
@@ -264,7 +264,7 @@ namespace GMap.NET.WindowsPresentation
       #region IDisposable Members
 
       bool disposed = false;
-      private GMapControl _mapControl;
+
 
       public void Dispose()
       {
@@ -274,15 +274,15 @@ namespace GMap.NET.WindowsPresentation
 
             ClearEvents();
 
-            //foreach (var m in Markers)
-            //{
-            //   m.Dispose();
-            //}
+            foreach (var m in Markers)
+            {
+               m.Dispose();
+            }
 
-            //foreach (var r in Routes)
-            //{
-            //   r.Dispose();
-            //}
+            foreach (var r in Routes)
+            {
+               r.Dispose();
+            }
 
             //foreach (var p in Polygons)
             //{

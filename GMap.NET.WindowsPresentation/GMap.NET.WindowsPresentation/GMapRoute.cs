@@ -41,19 +41,20 @@ namespace GMap.NET.WindowsPresentation
                    }
     
                    var shape = map.CreateRoutePath(localPath);
-    
-                   if(this.Shape is Path)
+
+                   var path = Shape as Path;
+                   if(path != null)
                    {
-                      (this.Shape as Path).Data = shape.Data;
+                      path.Data = shape.Data;
                    }
                    else
                    {
-                      this.Shape = shape;
+                      Shape = shape;
                    }
                 }
                 else
                 {
-                   this.Shape = null;
+                   Shape = null;
                 }
             }
         }

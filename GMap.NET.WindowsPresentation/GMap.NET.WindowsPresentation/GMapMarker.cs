@@ -8,7 +8,7 @@ namespace GMap.NET.WindowsPresentation
    /// <summary>
    /// GMap.NET marker
    /// </summary>
-   public class GMapMarker : INotifyPropertyChanged
+   public class GMapMarker : INotifyPropertyChanged, IDisposable
    {
       public event PropertyChangedEventHandler PropertyChanged;
       protected void OnPropertyChanged(string name)
@@ -240,6 +240,11 @@ namespace GMap.NET.WindowsPresentation
             _map = m;
          }
          UpdateLocalPosition();
+      }
+
+      public void Dispose()
+      {
+         Clear();
       }
    }
 }
