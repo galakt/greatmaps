@@ -634,23 +634,32 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      private void OverlaysOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+      private void OverlaysOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs eventArgs)
       {
-         if (notifyCollectionChangedEventArgs.OldItems != null)
+         if (eventArgs.OldItems != null)
          {
-            foreach (GMapOverlay item in notifyCollectionChangedEventArgs.OldItems)
+            foreach (GMapOverlay item in eventArgs.OldItems)
             {
                item.MapControl = null;
             }
          }
 
-         if (notifyCollectionChangedEventArgs.NewItems != null)
+         if (eventArgs.NewItems != null)
          {
-            foreach (GMapOverlay item in notifyCollectionChangedEventArgs.NewItems)
+            foreach (GMapOverlay item in eventArgs.NewItems)
             {
                item.MapControl = this;
             }
          }
+
+         //todo: do not work
+         //if (eventArgs.Action == NotifyCollectionChangedAction.Reset)
+         //{
+         //   foreach (var gMapOverlay in Overlays)
+         //   {
+         //      gMapOverlay.Dispose();
+         //   }
+         //}
       }
 
       private void CoreOnCurrentPositionChanged(PointLatLng pointLatLng)
@@ -800,10 +809,11 @@ namespace GMap.NET.WindowsPresentation
       {
          using (Dispatcher.DisableProcessing())
          {
-            Debug.WriteLine("ForceUpdateOverlays");
-
+            //Debug.WriteLine($"ForceUpdateOverlays, trace={Environment.StackTrace}");
+            //Debug.WriteLine($"ForceUpdateOverlays");
             UpdateMarkersOffset();
 
+            // Update markers
             foreach (GMapMarker i in items)
             {
                if (i != null)
@@ -816,6 +826,37 @@ namespace GMap.NET.WindowsPresentation
                   }
                }
             }
+
+            // Update overlays
+            //foreach (var gMapOverlay in Overlays)
+            //{
+            //   Debug.WriteLine($"ForceUpdateOverlays, Overlays count = {Overlays.Count}");
+            //   Debug.WriteLine($"ForceUpdateOverlays, gMapOverlay.Markers count = {gMapOverlay.Markers.Count}");
+            //   Debug.WriteLine($"ForceUpdateOverlays, gMapOverlay.Routes count = {gMapOverlay.Routes.Count}");
+            //   // Markers of overlay
+            //   foreach (var gMapMarker in gMapOverlay.Markers)
+            //   {
+            //      if (gMapMarker != null)
+            //      {
+            //         gMapMarker.ForceUpdateLocalPosition(this);
+
+            //         if (gMapMarker is IShapable)
+            //         {
+            //            (gMapMarker as IShapable).RegenerateShape(this);
+            //         }
+            //      }
+            //   }
+
+            //   // Routes or overlay
+            //   foreach (var gMapRoute in gMapOverlay.Routes)
+            //   {
+            //      if (gMapRoute != null)
+            //      {
+            //         gMapRoute.ForceUpdateLocalPosition(this);
+            //         gMapRoute.RegenerateShape(this);
+            //      }
+            //   }
+            //}
          }
          InvalidateVisual();
       }

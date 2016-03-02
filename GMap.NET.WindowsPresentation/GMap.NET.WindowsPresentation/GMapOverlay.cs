@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Windows;
+using GMap.NET.WindowsPresentation.HelpersAndUtils;
 
 namespace GMap.NET.WindowsPresentation
 {
@@ -23,11 +25,11 @@ namespace GMap.NET.WindowsPresentation
       /// <summary>
       /// List of routes, should be thread safe
       /// </summary>
-      public readonly ObservableCollection<GMapRoute> Routes = new ObservableCollection<GMapRoute>();
+      public readonly ObservableCollection<GMapRoute> Routes = new GmapObservableCollection<GMapRoute>();
       /// <summary>
       /// List of polygons, should be thread safe
       /// </summary>
-      public readonly ObservableCollection<GMapPolygon> Polygons = new ObservableCollection<GMapPolygon>();
+      public readonly ObservableCollection<GMapPolygon> Polygons = new GmapObservableCollection<GMapPolygon>();
       /// <summary>
       /// Enable layer to show on map
       /// </summary>
@@ -77,6 +79,11 @@ namespace GMap.NET.WindowsPresentation
          {
             return;
          }
+
+         //foreach (var mapMarker in Markers)
+         //{
+         //   ProcessMarkerVisibility(mapMarker);
+         //}
 
          foreach (var layersMarker in Markers)
          {
@@ -136,6 +143,7 @@ namespace GMap.NET.WindowsPresentation
 
       internal void ShowLayerMarkers()
       {
+         //Debug.WriteLine($"ShowLayerMarkers");
          //todo: it can be too slow on large collections!
          foreach (var mapMarker in Markers)
          {
@@ -149,6 +157,7 @@ namespace GMap.NET.WindowsPresentation
 
       private void ProcessMarkerVisibility(GMapMarker mapMarker)
       {
+         //Debug.WriteLine($"ProcessMarkerVisibility. mapMarker.Shape == null ? {mapMarker.Shape == null}");
          if (mapMarker.Shape == null)
          {
             return;
@@ -157,10 +166,12 @@ namespace GMap.NET.WindowsPresentation
          if (IsActive && (!AllowZoomLvlVisibilityValidation || !HidenByZoomValidation || mapMarker.AllowZoomLvlVisibilityValidation == false))
          {
             mapMarker.Shape.Visibility = Visibility.Visible;
+            //Debug.WriteLine("mapMarker.Shape.Visibility = Visibility.Visible;");
          }
          else
          {
             mapMarker.Shape.Visibility = Visibility.Collapsed;
+            //Debug.WriteLine("mapMarker.Shape.Visibility = Visibility.Collapsed;");
          }
       }
 
@@ -185,7 +196,7 @@ namespace GMap.NET.WindowsPresentation
                MapControl.Markers.Remove(item);
             }
          }
-         
+
          if (e.NewItems != null)
          {
             foreach (GMapRoute item in e.NewItems)
@@ -201,6 +212,14 @@ namespace GMap.NET.WindowsPresentation
                }
             }
          }
+
+         //if (e.Action == NotifyCollectionChangedAction.Reset)
+         //{
+         //   foreach (var gMapRoute in Routes)
+         //   {
+         //      gMapRoute.Clear();
+         //   }
+         //}
       }
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -2,13 +2,15 @@
 using System.Windows;
 using System.Windows.Media;
 using System;
+using System.Diagnostics;
+using GMap.NET.WindowsPresentation.Interfaces;
 
 namespace GMap.NET.WindowsPresentation
 {
    /// <summary>
    /// GMap.NET marker
    /// </summary>
-   public class GMapMarker : INotifyPropertyChanged, IDisposable
+   public class GMapMarker : INotifyPropertyChanged, IDisposable, IClearable
    {
       public event PropertyChangedEventHandler PropertyChanged;
       protected void OnPropertyChanged(string name)
@@ -218,7 +220,8 @@ namespace GMap.NET.WindowsPresentation
       /// </summary>
       void UpdateLocalPosition()
       {
-         if(Map != null)
+         //Debug.WriteLine($"GMapMarker => UpdateLocalPosition. Map != null ? {Map != null}");
+         if (Map != null)
          {
             GPoint p = Map.FromLatLngToLocal(Position);
             p.Offset(-(long)Map.MapTranslateTransform.X, -(long)Map.MapTranslateTransform.Y);
@@ -235,6 +238,7 @@ namespace GMap.NET.WindowsPresentation
       /// <param name="m"></param>
       internal void ForceUpdateLocalPosition(GMapControl m)
       {
+         //Debug.WriteLine($"GMapMarker => ForceUpdateLocalPosition. m != null ? {m != null}");
          if(m != null)
          {
             _map = m;
