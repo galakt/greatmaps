@@ -48,7 +48,7 @@ namespace GMap.NET.WindowsPresentation
       private Application _loadedApp;
       private Canvas _mapCanvas = null;
       /// <summary>
-      /// current selected area in map
+      /// Current selected area in map
       /// </summary>
       private RectLatLng _selectedArea;
       private RectLatLng? _lazySetZoomToFitRect = null;
@@ -56,75 +56,17 @@ namespace GMap.NET.WindowsPresentation
       private readonly RotateTransform _rotationMatrix = new RotateTransform();
       private GeneralTransform _rotationMatrixInvert = new RotateTransform();
       private bool _renderHelperLine = false;
-      private bool _isSelected = false;
+      /// <summary>
+      /// Is in mode when selecting area on map
+      /// </summary>
+      private bool _isInSelectingMode = false;
       private int _onMouseUpTimestamp = 0;
       private Cursor _cursorBefore = Cursors.Arrow;
 #if DEBUG
       private readonly Pen _virtualCenterCrossPen = new Pen(Brushes.Blue, 1);
 #endif
       private HelperLineOptionsEnum _helperLineOptionEnum = HelperLineOptionsEnum.DontShow;
-
-      public Pen HelperLinePen = new Pen(Brushes.Blue, 1);
-      public Brush EmptyMapBackground = Brushes.WhiteSmoke;
-      public Pen CenterCrossPen = new Pen(Brushes.Red, 1);
-      public bool ShowCenter = true;
-
-      /// <summary>
-      /// if true, selects area just by holding mouse and moving
-      /// </summary>
-      public bool DisableAltForSelection = false;
-
-      /// <summary>
-      /// pen for empty tile borders
-      /// </summary>
-      public Pen EmptyTileBorders = new Pen(Brushes.White, 1.0);
-
-      /// <summary>
-      /// pen for Selection
-      /// </summary>
-      public Pen SelectionPen = new Pen(Brushes.Blue, 2.0);
-
-      /// <summary>
-      /// background of selected area
-      /// </summary>
-      public Brush SelectedAreaFill =
-         new SolidColorBrush(Color.FromArgb(33, Colors.RoyalBlue.R, Colors.RoyalBlue.G, Colors.RoyalBlue.B));
-
-      /// <summary>
-      /// /// <summary>
-      /// pen for empty tile background
-      /// </summary>
-      public Brush EmptytileBrush = Brushes.Navy;
-
-      /// <summary>
-      /// text on empty tiles
-      /// </summary>
-      public FormattedText EmptyTileText =
-         new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.",
-            System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Arial"), 16,
-            Brushes.Blue);
-
-      /// <summary>
-      /// map dragg button
-      /// </summary>
-      [Category("GMap.NET")]
-      public MouseButton DragButton = MouseButton.Right;
-
-      /// <summary>
-      /// Figure for selection
-      /// </summary>
-      public GMapSelectionFigureEnum SelectionFigure = GMapSelectionFigureEnum.Rectangle;
-
-      /// <summary>
-      /// is touch control enabled
-      /// </summary>
-      public bool TouchEnabled = true;
-
-      /// <summary>
-      /// map boundaries
-      /// </summary>
-      public RectLatLng? BoundsOfMap = null;
-
+      
       /// <summary>
       /// current markers overlay offset
       /// </summary>
@@ -424,7 +366,72 @@ namespace GMap.NET.WindowsPresentation
          set { _core.fillEmptyTiles = value; }
       }
 
+      /// <summary>
+      /// Figure for selection
+      /// </summary>
+      public GMapSelectionFigureEnum SelectionFigure { get; set; } = GMapSelectionFigureEnum.Rectangle;
+
+      /// <summary>
+      /// is touch control enabled
+      /// </summary>
+      public bool TouchEnabled { get; set; } = true;
+
+      /// <summary>
+      /// map boundaries
+      /// </summary>
+      public RectLatLng? BoundsOfMap { get; set; } = null;
+
+      /// <summary>
+      /// pen for empty tile background
+      /// </summary>
+      public Brush EmptytileBrush { get; set; } = Brushes.Navy;
+
+      /// <summary>
+      /// text on empty tiles
+      /// </summary>
+      public FormattedText EmptyTileText { get; set; } =
+         new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.",
+            System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Arial"), 16,
+            Brushes.Blue);
+
+      /// <summary>
+      /// map dragg button
+      /// </summary>
+      [Category("GMap.NET")]
+      public MouseButton DragButton { get; set; } = MouseButton.Right;
+
+      /// <summary>
+      /// if true, selects area just by holding mouse and moving
+      /// </summary>
+      public bool DisableAltForSelection { get; set; } = false;
+
+      /// <summary>
+      /// pen for empty tile borders
+      /// </summary>
+      public Pen EmptyTileBorders { get; set; } = new Pen(Brushes.White, 1.0);
+
+      /// <summary>
+      /// pen for Selection
+      /// </summary>
+      public Pen SelectionPen { get; set; } = new Pen(Brushes.Blue, 2.0);
+
+      /// <summary>
+      /// background of selected area
+      /// </summary>
+      public Brush SelectedAreaFill { get; set; } =
+         new SolidColorBrush(Color.FromArgb(33, Colors.RoyalBlue.R, Colors.RoyalBlue.G, Colors.RoyalBlue.B));
+      public bool ShowCenter { get; set; } = true;
+      public Pen HelperLinePen { get; set; } = new Pen(Brushes.Blue, 1);
+      public Brush EmptyMapBackground { get; set; } = Brushes.WhiteSmoke;
+      public Pen CenterCrossPen { get; set; } = new Pen(Brushes.Red, 1);
+      
+      /// <summary>
+      /// Begin point of selection map area
+      /// </summary>
       public PointLatLng SelectionStart => _selectionStart;
+      /// <summary>
+      /// End point of selection map area
+      /// </summary>
       public PointLatLng SelectionEnd => _selectionEnd;
 
       /// <summary>
@@ -1650,10 +1657,10 @@ namespace GMap.NET.WindowsPresentation
          }
          else
          {
-            if (!_isSelected)
+            if (!_isInSelectingMode)
             {
                Point p = e.GetPosition(this);
-               _isSelected = true;
+               _isInSelectingMode = true;
                SelectedArea = RectLatLng.Empty;
                _selectionEnd = PointLatLng.Empty;
                _selectionStart = FromLocalToLatLng((int) p.X, (int) p.Y);
@@ -1665,9 +1672,9 @@ namespace GMap.NET.WindowsPresentation
       {
          base.OnMouseUp(e);
 
-         if (_isSelected)
+         if (_isInSelectingMode)
          {
-            _isSelected = false;
+            _isInSelectingMode = false;
          }
 
          if (_core.IsDragging)
@@ -1795,7 +1802,7 @@ namespace GMap.NET.WindowsPresentation
          }
          else
          {
-            if (_isSelected && !_selectionStart.IsEmpty &&
+            if (_isInSelectingMode && !_selectionStart.IsEmpty &&
                 (Keyboard.Modifiers == ModifierKeys.Shift || Keyboard.Modifiers == ModifierKeys.Alt ||
                  DisableAltForSelection))
             {
@@ -1849,9 +1856,9 @@ namespace GMap.NET.WindowsPresentation
 
          if (TouchEnabled)
          {
-            if (_isSelected)
+            if (_isInSelectingMode)
             {
-               _isSelected = false;
+               _isInSelectingMode = false;
             }
 
             if (_core.IsDragging)
@@ -2202,6 +2209,7 @@ namespace GMap.NET.WindowsPresentation
       {
          get { return GMap.NET.RenderMode.WPF; }
       }
+
 
       #endregion
 
