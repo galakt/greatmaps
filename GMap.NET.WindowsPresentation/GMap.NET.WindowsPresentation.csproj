@@ -82,6 +82,8 @@
     <Compile Include="GMap.NET.WindowsPresentation\GMapControl.cs" />
     <Compile Include="GMap.NET.WindowsPresentation\GMapSelectionFigureEnum.cs" />
     <Compile Include="HelpersAndUtils\GmapObservableCollection.cs" />
+    <Compile Include="HelpersAndUtils\HelperLineOptions.cs" />
+    <Compile Include="HelpersAndUtils\ScaleModes.cs" />
     <Compile Include="Interfaces\IClearable.cs" />
     <Compile Include="Interfaces\IShapable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

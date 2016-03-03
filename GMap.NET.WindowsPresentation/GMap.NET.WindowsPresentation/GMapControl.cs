@@ -18,6 +18,7 @@ using GMap.NET.Internals;
 using System.Diagnostics;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
+using GMap.NET.WindowsPresentation.HelpersAndUtils;
 using GMap.NET.WindowsPresentation.Interfaces;
 
 namespace GMap.NET.WindowsPresentation
@@ -1594,7 +1595,7 @@ namespace GMap.NET.WindowsPresentation
          }
 
          // Render mouse 
-         if (renderHelperLine)
+         if (_renderHelperLine)
          {
             var p = Mouse.GetPosition(this);
 
@@ -1621,7 +1622,7 @@ namespace GMap.NET.WindowsPresentation
       readonly Pen VirtualCenterCrossPen = new Pen(Brushes.Blue, 1);
 #endif
 
-      HelperLineOptions helperLineOption = HelperLineOptions.DontShow;
+      private HelperLineOptions _helperLineOption = HelperLineOptions.DontShow;
 
       /// <summary>
       /// draw lines at the mouse pointer position
@@ -1629,11 +1630,11 @@ namespace GMap.NET.WindowsPresentation
       [Browsable(false)]
       public HelperLineOptions HelperLineOption
       {
-         get { return helperLineOption; }
+         get { return _helperLineOption; }
          set
          {
-            helperLineOption = value;
-            renderHelperLine = (helperLineOption == HelperLineOptions.ShowAlways);
+            _helperLineOption = value;
+            _renderHelperLine = (_helperLineOption == HelperLineOptions.ShowAlways);
             if (Core.IsStarted)
             {
                InvalidateVisual();
@@ -1642,16 +1643,16 @@ namespace GMap.NET.WindowsPresentation
       }
 
       public Pen HelperLinePen = new Pen(Brushes.Blue, 1);
-      bool renderHelperLine = false;
 
+      private bool _renderHelperLine = false;
       protected override void OnKeyUp(KeyEventArgs e)
       {
          base.OnKeyUp(e);
 
          if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
          {
-            renderHelperLine = !(e.IsUp && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt));
-            if (!renderHelperLine)
+            _renderHelperLine = !(e.IsUp && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt));
+            if (!_renderHelperLine)
             {
                InvalidateVisual();
             }
@@ -1664,8 +1665,8 @@ namespace GMap.NET.WindowsPresentation
 
          if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
          {
-            renderHelperLine = e.IsDown && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt);
-            if (renderHelperLine)
+            _renderHelperLine = e.IsDown && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt);
+            if (_renderHelperLine)
             {
                InvalidateVisual();
             }
@@ -1958,7 +1959,7 @@ namespace GMap.NET.WindowsPresentation
                }
             }
 
-            if (renderHelperLine)
+            if (_renderHelperLine)
             {
                InvalidateVisual(true);
             }
@@ -2425,36 +2426,6 @@ namespace GMap.NET.WindowsPresentation
       }
 
       #endregion
-   }
-
-   public enum HelperLineOptions
-   {
-      DontShow = 0,
-      ShowAlways = 1,
-      ShowOnModifierKey = 2
-   }
-
-   public enum ScaleModes
-   {
-      /// <summary>
-      /// no scaling
-      /// </summary>
-      Integer,
-
-      /// <summary>
-      /// scales to fractional level using a stretched tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
-      /// </summary>
-      ScaleUp,
-
-      /// <summary>
-      /// scales to fractional level using a narrowed tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
-      /// </summary>
-      ScaleDown,
-
-      /// <summary>
-      /// scales to fractional level using a combination both stretched and narrowed tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
-      /// </summary>
-      Dynamic
    }
 
    public delegate void SelectionChange(RectLatLng Selection, bool ZoomToFit);
