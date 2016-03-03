@@ -1,6 +1,7 @@
 ﻿using GMap.NET.WindowsPresentation.Interfaces;
 using System.Collections.Generic;
 using System.Windows.Shapes;
+using GMap.NET.WindowsPresentation.HelpersAndUtils;
 
 namespace GMap.NET.WindowsPresentation
 {
@@ -40,7 +41,7 @@ namespace GMap.NET.WindowsPresentation
                       localPath.Add(new System.Windows.Point(p.X - offset.X, p.Y - offset.Y));
                    }
     
-                   var shape = map.CreateRoutePath(localPath);
+                   var shape = PathHelper.CreateRoutePath(localPath);
 
                    var path = Shape as Path;
                    if(path != null)
