@@ -174,12 +174,12 @@ namespace GMap.NET.WindowsPresentation
          }
       }
 
-      private ScaleModes scaleMode = ScaleModes.Integer;
+      private ScaleModesEnum _scaleModeEnum = ScaleModesEnum.Integer;
 
       /// <summary>
       /// Specifies, if a floating map scale is displayed using a 
       /// stretched, or a narrowed map.
-      /// If <code>ScaleMode</code> is <code>ScaleDown</code>,
+      /// If <code>_scaleModeEnum</code> is <code>ScaleDown</code>,
       /// then a scale of 12.3 is displayed using a map zoom level of 13
       /// resized to the lower level. If the parameter is <code>ScaleUp</code> ,
       /// then the same scale is displayed using a zoom level of 12 with an
@@ -189,12 +189,12 @@ namespace GMap.NET.WindowsPresentation
       /// </summary>
       [Category("GMap.NET")]
       [Description("map scale type")]
-      public ScaleModes ScaleMode
+      public ScaleModesEnum ScaleModeEnum
       {
-         get { return scaleMode; }
+         get { return _scaleModeEnum; }
          set
          {
-            scaleMode = value;
+            _scaleModeEnum = value;
             InvalidateVisual();
          }
       }
@@ -209,17 +209,17 @@ namespace GMap.NET.WindowsPresentation
             Debug.WriteLine("Zoom: " + e.OldValue + " -> " + value);
 
             double remainder = value%1;
-            if (map.ScaleMode != ScaleModes.Integer && remainder != 0 && map.ActualWidth > 0)
+            if (map.ScaleModeEnum != ScaleModesEnum.Integer && remainder != 0 && map.ActualWidth > 0)
             {
                bool scaleDown;
 
-               switch (map.ScaleMode)
+               switch (map.ScaleModeEnum)
                {
-                  case ScaleModes.ScaleDown:
+                  case ScaleModesEnum.ScaleDown:
                      scaleDown = true;
                      break;
 
-                  case ScaleModes.Dynamic:
+                  case ScaleModesEnum.Dynamic:
                      scaleDown = remainder > 0.25;
                      break;
 
@@ -1622,19 +1622,19 @@ namespace GMap.NET.WindowsPresentation
       readonly Pen VirtualCenterCrossPen = new Pen(Brushes.Blue, 1);
 #endif
 
-      private HelperLineOptions _helperLineOption = HelperLineOptions.DontShow;
+      private HelperLineOptionsEnum _helperLineOptionEnum = HelperLineOptionsEnum.DontShow;
 
       /// <summary>
       /// draw lines at the mouse pointer position
       /// </summary>
       [Browsable(false)]
-      public HelperLineOptions HelperLineOption
+      public HelperLineOptionsEnum HelperLineOptionEnum
       {
-         get { return _helperLineOption; }
+         get { return _helperLineOptionEnum; }
          set
          {
-            _helperLineOption = value;
-            _renderHelperLine = (_helperLineOption == HelperLineOptions.ShowAlways);
+            _helperLineOptionEnum = value;
+            _renderHelperLine = (_helperLineOptionEnum == HelperLineOptionsEnum.ShowAlways);
             if (Core.IsStarted)
             {
                InvalidateVisual();
@@ -1649,7 +1649,7 @@ namespace GMap.NET.WindowsPresentation
       {
          base.OnKeyUp(e);
 
-         if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
+         if (HelperLineOptionEnum == HelperLineOptionsEnum.ShowOnModifierKey)
          {
             _renderHelperLine = !(e.IsUp && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt));
             if (!_renderHelperLine)
@@ -1663,7 +1663,7 @@ namespace GMap.NET.WindowsPresentation
       {
          base.OnKeyDown(e);
 
-         if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
+         if (HelperLineOptionEnum == HelperLineOptionsEnum.ShowOnModifierKey)
          {
             _renderHelperLine = e.IsDown && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt);
             if (_renderHelperLine)
@@ -1927,7 +1927,7 @@ namespace GMap.NET.WindowsPresentation
                   Core.Drag(Core.mouseCurrent);
                }
 
-               if (IsRotated || scaleMode != ScaleModes.Integer)
+               if (IsRotated || _scaleModeEnum != ScaleModesEnum.Integer)
                {
                   ForceUpdateOverlays();
                }

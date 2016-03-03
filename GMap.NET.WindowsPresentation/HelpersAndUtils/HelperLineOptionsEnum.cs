@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GMap.NET.WindowsPresentation.HelpersAndUtils
 {
-   public enum HelperLineOptions
+   public enum HelperLineOptionsEnum
    {
       DontShow = 0,
       ShowAlways = 1,

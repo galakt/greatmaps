@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GMap.NET.WindowsPresentation.HelpersAndUtils
 {
-   public enum ScaleModes
+   public enum ScaleModesEnum
    {
       /// <summary>
       /// no scaling
