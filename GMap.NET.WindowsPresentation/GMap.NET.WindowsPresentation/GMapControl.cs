@@ -14,7 +14,6 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using GMap.NET;
 using GMap.NET.Internals;
 using System.Diagnostics;
 using GMap.NET.MapProviders;
@@ -28,6 +27,8 @@ namespace GMap.NET.WindowsPresentation
    /// </summary>
    public partial class GMapControl : ItemsControl, Interface, IDisposable
    {
+      #region Properties
+
       #region DependencyProperties and related stuff
 
       public System.Windows.Point MapPoint
@@ -287,9 +288,10 @@ namespace GMap.NET.WindowsPresentation
 
       #endregion
 
-      readonly Core Core = new Core();
-      //GRect region;
-      delegate void MethodInvoker();
+      #endregion
+      
+      private readonly Core Core = new Core();
+      private delegate void MethodInvoker();
 
       PointLatLng selectionStart;
       PointLatLng selectionEnd;
@@ -641,6 +643,7 @@ namespace GMap.NET.WindowsPresentation
             foreach (GMapOverlay item in eventArgs.OldItems)
             {
                item.MapControl = null;
+               //todo: delete overlay items
             }
          }
 
@@ -652,14 +655,10 @@ namespace GMap.NET.WindowsPresentation
             }
          }
 
-         //todo: do not work
-         //if (eventArgs.Action == NotifyCollectionChangedAction.Reset)
-         //{
-         //   foreach (var gMapOverlay in Overlays)
-         //   {
-         //      gMapOverlay.Dispose();
-         //   }
-         //}
+         if (eventArgs.Action == NotifyCollectionChangedAction.Reset)
+         {
+            //todo: delete overlay items
+         }
       }
 
       private void CoreOnCurrentPositionChanged(PointLatLng pointLatLng)

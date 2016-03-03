@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Windows;
 using GMap.NET.WindowsPresentation.HelpersAndUtils;
+using GMap.NET.WindowsPresentation.Interfaces;
 
 namespace GMap.NET.WindowsPresentation
 {
@@ -193,6 +194,8 @@ namespace GMap.NET.WindowsPresentation
          {
             foreach (GMapRoute item in e.OldItems)
             {
+               var clearableItem = item as IClearable;
+               clearableItem?.Clear();
                MapControl.Markers.Remove(item);
             }
          }
@@ -213,13 +216,11 @@ namespace GMap.NET.WindowsPresentation
             }
          }
 
-         //if (e.Action == NotifyCollectionChangedAction.Reset)
-         //{
-         //   foreach (var gMapRoute in Routes)
-         //   {
-         //      gMapRoute.Clear();
-         //   }
-         //}
+         if (e.Action == NotifyCollectionChangedAction.Reset)
+         {
+            // Do nothing, because we override collection`s ClearItems and soon throw CollectionChanged
+            // event with action Remove and OldItems
+         }
       }
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -228,6 +229,8 @@ namespace GMap.NET.WindowsPresentation
          {
             foreach (GMapMarker item in e.OldItems)
             {
+               var clearableItem = item as IClearable;
+               clearableItem?.Clear();
                MapControl.Markers.Remove(item);
             }
          }
@@ -252,6 +255,12 @@ namespace GMap.NET.WindowsPresentation
                   MapControl.Markers.Add(item);
                }
             }
+         }
+
+         if (e.Action == NotifyCollectionChangedAction.Reset)
+         {
+            // Do nothing, because we override collection`s ClearItems and soon throw CollectionChanged
+            // event with action Remove and OldItems
          }
       }
 
