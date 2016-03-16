@@ -9,7 +9,7 @@ namespace GMap.NET.MapProviders
    using GMap.NET.Internals;
    using GMap.NET.Projections;
 
-   public abstract class YahooMapProviderBase : GMapProvider, GeocodingProvider
+   public abstract class YahooMapProviderBase : GMapProvider, IGeocodingProvider
    {
       public YahooMapProviderBase()
       {

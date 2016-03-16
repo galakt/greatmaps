@@ -18,7 +18,7 @@ namespace GMap.NET.MapProviders
     using OpenNETCF.Security.Cryptography;
 #endif
 
-    public abstract class GoogleMapProviderBase : GMapProvider, RoutingProvider, GeocodingProvider, DirectionsProvider
+    public abstract class GoogleMapProviderBase : GMapProvider, IRoutingProvider, IGeocodingProvider, DirectionsProvider
     {
         public GoogleMapProviderBase()
         {

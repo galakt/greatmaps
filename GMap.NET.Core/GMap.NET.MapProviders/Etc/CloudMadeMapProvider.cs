@@ -9,7 +9,7 @@ namespace GMap.NET.MapProviders
    using System.Xml;
    using System.Diagnostics;
 
-   public abstract class CloudMadeMapProviderBase : GMapProvider, RoutingProvider, DirectionsProvider
+   public abstract class CloudMadeMapProviderBase : GMapProvider, IRoutingProvider, DirectionsProvider
    {
       public readonly string ServerLetters = "abc";
       public readonly string DoubleResolutionString = "@2x";

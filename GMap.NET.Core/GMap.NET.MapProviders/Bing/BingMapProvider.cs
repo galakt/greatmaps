@@ -13,7 +13,7 @@ namespace GMap.NET.MapProviders
    using GMap.NET.Internals;
    using GMap.NET.Projections;
 
-   public abstract class BingMapProviderBase : GMapProvider, RoutingProvider, GeocodingProvider
+   public abstract class BingMapProviderBase : GMapProvider, IRoutingProvider, IGeocodingProvider
    {
       public BingMapProviderBase()
       {

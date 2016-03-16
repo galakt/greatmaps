@@ -49,13 +49,14 @@ namespace Demo.WindowsPresentation
          // or
          //GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
          //
+         GMapProvider.WebProxy = new WebProxy("10.100.122.141", 3128);
 
          // set cache mode only if no internet avaible
-         if(!Stuff.PingNetwork("pingtest.com"))
-         {
-            MainMap.Manager.Mode = AccessMode.CacheOnly;
-            MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsPresentation", MessageBoxButton.OK, MessageBoxImage.Warning);
-         }
+         //if (!Stuff.PingNetwork("pingtest.com"))
+         //{
+         //   MainMap.Manager.Mode = AccessMode.CacheOnly;
+         //   MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsPresentation", MessageBoxButton.OK, MessageBoxImage.Warning);
+         //}
 
          // config map
          MainMap.MapProvider = GMapProviders.OpenStreetMap;
@@ -824,7 +825,7 @@ namespace Demo.WindowsPresentation
       // adds route
       private void button12_Click(object sender, RoutedEventArgs e)
       {
-         RoutingProvider rp = MainMap.MapProvider as RoutingProvider;
+         IRoutingProvider rp = MainMap.MapProvider as IRoutingProvider;
          if(rp == null)
          {
             rp = GMapProviders.OpenStreetMap; // use OpenStreetMap if provider does not implement routing

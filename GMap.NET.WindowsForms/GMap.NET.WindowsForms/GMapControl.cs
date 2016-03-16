@@ -2366,10 +2366,10 @@ namespace GMap.NET.WindowsForms
         {
             GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
 
-            GeocodingProvider gp = MapProvider as GeocodingProvider;
+            IGeocodingProvider gp = MapProvider as IGeocodingProvider;
             if (gp == null)
             {
-                gp = GMapProviders.OpenStreetMap as GeocodingProvider;
+                gp = GMapProviders.OpenStreetMap as IGeocodingProvider;
             }
 
             if (gp != null)

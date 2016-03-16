@@ -283,3 +283,6 @@ Testing/TemplatedBinding/obj/Release/TemplatedBinding_MarkupCompile.i.cache
 Testing/TemplatedBinding/obj/Release/TempPE/Properties.Resources.Designer.cs.dll
 Testing/TemplatedBinding/obj/Release/Window1.g.i.cs
 Tools/MapCruncher/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+GMap.NET.WindowsPresentation/obj/Debug/GMap.NET.WindowsPresentation.csproj.GenerateResource.Cache
+GMap.NET.WindowsPresentation/obj/Debug/GMap.NET.WindowsPresentation.Properties.Resources.resources
+GMap.NET.WindowsPresentation/obj/Debug/TempPE/Properties.Resources.Designer.cs.dll

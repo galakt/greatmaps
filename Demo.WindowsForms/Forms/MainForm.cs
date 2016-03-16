@@ -1897,7 +1897,7 @@ namespace Demo.WindowsForms
       // add test route
       private void button3_Click(object sender, EventArgs e)
       {
-         RoutingProvider rp = MainMap.MapProvider as RoutingProvider;
+         IRoutingProvider rp = MainMap.MapProvider as IRoutingProvider;
          if(rp == null)
          {
             rp = GMapProviders.OpenStreetMap; // use OpenStreetMap if provider does not implement routing
