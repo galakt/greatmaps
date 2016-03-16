@@ -15,17 +15,31 @@ namespace GMap.NET
 
       private long x;
       private long y;
+      private object _data;
+      private decimal? _weight;
 
       public GPoint(long x, long y)
       {
          this.x = x;
          this.y = y;
+         _data = null;
+         _weight = null;
       }
 
+      public GPoint(long x, long y, object data, decimal? weight)
+      {
+         this.x = x;
+         this.y = y;
+         _data = data;
+         _weight = weight;
+      }
+      
       public GPoint(GSize sz)
       {
          this.x = sz.Width;
          this.y = sz.Height;
+         _data = null;
+         _weight = null;
       }
 
       //public GPoint(int dw)
@@ -33,6 +47,8 @@ namespace GMap.NET
       //   this.x = (short) LOWORD(dw);
       //   this.y = (short) HIWORD(dw);
       //}
+      public object Data { get { return _data; } set { _data = value; } }
+      public decimal? Weight { get { return _weight; } set { _weight = value; } }
 
       public bool IsEmpty
       {

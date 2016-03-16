@@ -1,4 +1,3 @@
-
 namespace GMap.NET
 {
    using System.Globalization;

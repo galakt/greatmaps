@@ -13,6 +13,8 @@ namespace GMap.NET
       public static readonly PointLatLng Empty = new PointLatLng();
       private double lat;
       private double lng;
+      private object _data;
+      private decimal? _weight;
 
       bool NotEmpty;
 
@@ -20,6 +22,17 @@ namespace GMap.NET
       {
          this.lat = lat;
          this.lng = lng;
+         _data = null;
+         _weight = null;
+         NotEmpty = true;
+      }
+
+      public PointLatLng(double lat, double lng, object data, decimal? weight)
+      {
+         this.lat = lat;
+         this.lng = lng;
+         _data = data;
+         _weight = weight;
          NotEmpty = true;
       }
 
@@ -32,6 +45,18 @@ namespace GMap.NET
          {
             return !NotEmpty;
          }
+      }
+
+      public object Data
+      {
+         get { return _data; }
+         set { _data = value; }
+      }
+
+      public decimal? Weight
+      {
+         get { return _weight; }
+         set { _weight = value; }
       }
 
       public double Lat
