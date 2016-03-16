@@ -1510,10 +1510,10 @@ namespace GMap.NET.WindowsForms
 
             #region -- copyright --
 
-            if (!string.IsNullOrEmpty(Core.provider.Copyright))
+            if (!string.IsNullOrEmpty(Core.Provider.Copyright))
             {
 #if !PocketPC
-                g.DrawString(Core.provider.Copyright, CopyrightFont, Brushes.Navy, 3, Height - CopyrightFont.Height - 5);
+                g.DrawString(Core.Provider.Copyright, CopyrightFont, Brushes.Navy, 3, Height - CopyrightFont.Height - 5);
 #else
             g.DrawString(Core.provider.Copyright, CopyrightFont, CopyrightBrush, 3, Height - CopyrightFont.Size - 15);
 #endif
