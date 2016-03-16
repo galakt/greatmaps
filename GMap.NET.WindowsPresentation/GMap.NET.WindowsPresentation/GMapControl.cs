@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using GMap.NET.Internals;
 using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
 using GMap.NET.WindowsPresentation.HelpersAndUtils;
@@ -47,9 +49,6 @@ namespace GMap.NET.WindowsPresentation
       private readonly ScaleTransform _lastScaleTransform = new ScaleTransform();
       private Application _loadedApp;
       private Canvas _mapCanvas = null;
-      /// <summary>
-      /// Current selected area in map
-      /// </summary>
       private RectLatLng _selectedArea;
       private RectLatLng? _lazySetZoomToFitRect = null;
       private bool _lazyEvents = true;
@@ -276,7 +275,7 @@ namespace GMap.NET.WindowsPresentation
             double value = (double) e.NewValue;
 
             Debug.WriteLine("Zoom: " + e.OldValue + " -> " + value);
-
+            //ScreenCopyHelper.PrintMap((int)map.ActualWidth, (int)map.ActualHeight, map);
             double remainder = value%1;
             if (map.ScaleModeEnum != ScaleModesEnum.Integer && remainder != 0 && map.ActualWidth > 0)
             {
@@ -530,6 +529,9 @@ namespace GMap.NET.WindowsPresentation
          set { _core.LevelsKeepInMemmory = value; }
       }
 
+      /// <summary>
+      /// Current selected area in map
+      /// </summary>
       [Browsable(false)]
       public RectLatLng SelectedArea
       {
@@ -838,6 +840,8 @@ namespace GMap.NET.WindowsPresentation
             InvalidateVisual();
          }
       }
+
+
 
       /// <summary>
       /// inits core system
@@ -1250,7 +1254,7 @@ namespace GMap.NET.WindowsPresentation
          }
          return false;
       }
-      
+
       /// <summary>
       /// sets to max zoom to fit all markers and centers them in map
       /// </summary>

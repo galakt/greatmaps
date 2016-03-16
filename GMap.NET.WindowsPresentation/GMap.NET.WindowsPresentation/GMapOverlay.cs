@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows;
 using GMap.NET.WindowsPresentation.HelpersAndUtils;
@@ -18,11 +20,11 @@ namespace GMap.NET.WindowsPresentation
       public string OverlayId { get; set; }
       public string OverlayName { get; set; }
       
-      //todo: Must make thread safe!
+      //todo: Must be thread safe!
       /// <summary>
       /// List of markers, should be thread safe
       /// </summary>
-      public readonly ObservableCollection<GMapMarker> Markers = new ObservableCollection<GMapMarker>();
+      public readonly ObservableCollection<GMapMarker> Markers = new GmapObservableCollection<GMapMarker>();
       /// <summary>
       /// List of routes, should be thread safe
       /// </summary>
@@ -73,7 +75,7 @@ namespace GMap.NET.WindowsPresentation
          OverlayId = overlayId;
          CreateEvents();
       }
-
+      
       protected virtual void OnMapControlChanged()
       {
          if (MapControl == null)
@@ -187,18 +189,10 @@ namespace GMap.NET.WindowsPresentation
       {
          throw new NotImplementedException();
       }
-
+      
       private void Routes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         if (e.OldItems != null && MapControl != null)
-         {
-            foreach (GMapRoute item in e.OldItems)
-            {
-               var clearableItem = item as IClearable;
-               clearableItem?.Clear();
-               MapControl.Markers.Remove(item);
-            }
-         }
+         RemoveOldMarkers<GMapRoute>(e.OldItems);
 
          if (e.NewItems != null)
          {
@@ -218,22 +212,14 @@ namespace GMap.NET.WindowsPresentation
 
          if (e.Action == NotifyCollectionChangedAction.Reset)
          {
-            // Do nothing, because we override collection`s ClearItems and soon throw CollectionChanged
-            // event with action Remove and OldItems
+            // Do nothing, because we override collection`s ClearItems and will throw CollectionChanged
+            // event soon with action Remove and OldItems
          }
       }
 
       private void Markers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
       {
-         if (e.OldItems != null && MapControl != null)
-         {
-            foreach (GMapMarker item in e.OldItems)
-            {
-               var clearableItem = item as IClearable;
-               clearableItem?.Clear();
-               MapControl.Markers.Remove(item);
-            }
-         }
+         RemoveOldMarkers<GMapMarker>(e.OldItems);
 
          if (e.NewItems != null)
          {
@@ -259,8 +245,21 @@ namespace GMap.NET.WindowsPresentation
 
          if (e.Action == NotifyCollectionChangedAction.Reset)
          {
-            // Do nothing, because we override collection`s ClearItems and soon throw CollectionChanged
-            // event with action Remove and OldItems
+            // Do nothing, because we override collection`s ClearItems and will throw CollectionChanged
+            // event soon with action Remove and OldItems
+         }
+      }
+
+      private void RemoveOldMarkers<T>(IList oldItems) where T : GMapMarker
+      {
+         if (oldItems != null && MapControl != null)
+         {
+            foreach (T item in oldItems)
+            {
+               var clearableItem = item as IClearable;
+               clearableItem?.Clear();
+               MapControl.Markers.Remove(item);
+            }
          }
       }
 
