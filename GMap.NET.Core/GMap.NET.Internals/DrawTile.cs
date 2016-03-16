@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+
 namespace GMap.NET.Internals
 {
    /// <summary>

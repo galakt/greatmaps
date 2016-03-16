@@ -1,15 +1,13 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using GMap.NET.Projections;
+using GMap.NET.MapProviders;
+using System.ComponentModel;
+
 namespace GMap.NET.Internals
 {
-   using System;
-   using System.Collections.Generic;
-   using System.Diagnostics;
-   using System.Threading;
-   using GMap.NET.Projections;
-   using System.IO;
-   using GMap.NET.MapProviders;
-   using System.ComponentModel;
-
 #if PocketPC
    using OpenNETCF.ComponentModel;
    using OpenNETCF.Threading;
@@ -187,28 +185,28 @@ namespace GMap.NET.Internals
          }
       }
 
-      public GMapProvider provider;
+      private GMapProvider _provider;
       public GMapProvider Provider
       {
          get
          {
-            return provider;
+            return _provider;
          }
          set
          {
-            if(provider == null || !provider.Equals(value))
+            if(_provider == null || !_provider.Equals(value))
             {
-               bool diffProjection = (provider == null || provider.Projection != value.Projection);
+               bool diffProjection = (_provider == null || _provider.Projection != value.Projection);
 
-               provider = value;
+               _provider = value;
 
-               if(!provider.IsInitialized)
+               if(!_provider.IsInitialized)
                {
-                  provider.IsInitialized = true;
-                  provider.OnInitialized();
+                  _provider.IsInitialized = true;
+                  _provider.OnInitialized();
                }
 
-               if(provider.Projection != null && diffProjection)
+               if(_provider.Projection != null && diffProjection)
                {
                   tileRect = new GRect(GPoint.Empty, Provider.Projection.TileSize);
                   tileRectBearing = tileRect;
@@ -231,9 +229,9 @@ namespace GMap.NET.Internals
                   }
                   ReloadMap();
 
-                  if(minZoom < provider.MinZoom)
+                  if(minZoom < _provider.MinZoom)
                   {
-                     minZoom = provider.MinZoom;
+                     minZoom = _provider.MinZoom;
                   }
 
                   //if(provider.MaxZoom.HasValue && maxZoom > provider.MaxZoom)
@@ -243,9 +241,9 @@ namespace GMap.NET.Internals
 
                   zoomToArea = true;
 
-                  if(provider.Area.HasValue && !provider.Area.Value.Contains(Position))
+                  if(_provider.Area.HasValue && !_provider.Area.Value.Contains(Position))
                   {
-                     SetZoomToFitRect(provider.Area.Value);
+                     SetZoomToFitRect(_provider.Area.Value);
                      zoomToArea = false;
                   }
 
@@ -886,7 +884,7 @@ namespace GMap.NET.Internals
 
                      Tile t = new Tile(task.Value.Zoom, task.Value.Pos);
 
-                     foreach(var tl in provider.Overlays)
+                     foreach(var tl in _provider.Overlays)
                      {
                         int retry = 0;
                         do
@@ -894,7 +892,7 @@ namespace GMap.NET.Internals
                            PureImage img = null;
                            Exception ex = null;
 
-                           if (task.Value.Zoom >= provider.MinZoom && (!provider.MaxZoom.HasValue || task.Value.Zoom <= provider.MaxZoom))
+                           if (task.Value.Zoom >= _provider.MinZoom && (!_provider.MaxZoom.HasValue || task.Value.Zoom <= _provider.MaxZoom))
                            {
                               if(skipOverZoom == 0 || task.Value.Zoom <= skipOverZoom)
                               {

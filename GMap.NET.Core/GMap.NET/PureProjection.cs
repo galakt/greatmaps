@@ -419,6 +419,7 @@ namespace GMap.NET
       /// <summary>
       /// distance (in km) between two points specified by latitude/longitude
       /// The Haversine formula, http://www.movable-type.co.uk/scripts/latlong.html
+      /// gis.stackexchange : http://gis.stackexchange.com/questions/75528/length-of-a-degree-where-do-the-terms-in-this-formula-come-from
       /// </summary>
       /// <param name="p1"></param>
       /// <param name="p2"></param>
