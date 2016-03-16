@@ -1,10 +1,9 @@
-﻿
+﻿using System.Diagnostics;
+using GMap.NET.Internals;
+using System;
+
 namespace GMap.NET.CacheProviders
 {
-   using System.Diagnostics;
-   using GMap.NET.Internals;
-   using System;
-
    public class MemoryCache : IDisposable
    {
       readonly KiberTileCache TilesInMemory = new KiberTileCache();

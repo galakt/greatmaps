@@ -1,13 +1,12 @@
-﻿
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using GMap.NET.CacheProviders;
+using System.Security.Cryptography;
+
 namespace GMap.NET.Internals
 {
-   using System;
-   using System.Diagnostics;
-   using System.IO;
-   using System.Text;
-   using GMap.NET.CacheProviders;
-   using System.Security.Cryptography;
-
    internal class CacheLocator
    {
       private static string location;

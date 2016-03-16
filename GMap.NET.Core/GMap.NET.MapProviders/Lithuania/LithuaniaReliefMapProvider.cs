@@ -1,9 +1,8 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-
    /// <summary>
    /// LithuaniaReliefMap provider, http://www.maps.lt/map/
    /// </summary>

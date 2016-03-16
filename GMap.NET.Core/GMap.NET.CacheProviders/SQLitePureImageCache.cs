@@ -1,21 +1,18 @@
-﻿
-namespace GMap.NET.CacheProviders
-{
-#if SQLite
+﻿#if SQLite
 
-   using System.Collections.Generic;
-   using System.Data.Common;
-   using System.IO;
-   using System.Text;
-   using System;
-   using System.Diagnostics;
-   using System.Globalization;
-   using GMap.NET.MapProviders;
-   using System.Threading;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
+using System.Text;
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using GMap.NET.MapProviders;
+using System.Threading;
 
 #if !MONO
-   using System.Data.SQLite;
-   using GMap.NET.Internals;
+using System.Data.SQLite;
+using GMap.NET.Internals;
 #else
    using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
    using SQLiteTransaction = Mono.Data.Sqlite.SqliteTransaction;
@@ -24,6 +21,8 @@ namespace GMap.NET.CacheProviders
    using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
 #endif
 
+namespace GMap.NET.CacheProviders
+{
    /// <summary>
    /// ultra fast cache system for tiles
    /// </summary>

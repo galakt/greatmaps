@@ -1,20 +1,17 @@
-﻿
-namespace GMap.NET
-{
-   using System;
-   using System.Collections.Generic;
-   using System.Diagnostics;
-   using System.Globalization;
-   using System.IO;
-   using System.Net;
-   using System.Text;
-   using System.Threading;
-   using System.Xml;
-   using System.Xml.Serialization;
-   using GMap.NET.CacheProviders;
-   using GMap.NET.Internals;
-   using GMap.NET.MapProviders;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using System.Xml.Serialization;
+using GMap.NET.CacheProviders;
+using GMap.NET.Internals;
+using GMap.NET.MapProviders;
+using System.Reflection;
 
 #if PocketPC
    using OpenNETCF.ComponentModel;
@@ -22,6 +19,8 @@ namespace GMap.NET
    using Thread=OpenNETCF.Threading.Thread2;
 #endif
 
+namespace GMap.NET
+{
    /// <summary>
    /// maps manager
    /// </summary>
@@ -269,7 +268,7 @@ namespace GMap.NET
       public bool ImportFromGMDB(string file)
       {
 #if SQLite
-         if(PrimaryCache is GMap.NET.CacheProviders.SQLitePureImageCache)
+         if(PrimaryCache is CacheProviders.SQLitePureImageCache)
          {
             StringBuilder db = new StringBuilder((PrimaryCache as SQLitePureImageCache).GtileCache);
             db.AppendFormat(CultureInfo.InvariantCulture, "{0}{1}Data.gmdb", GMapProvider.LanguageStr, Path.DirectorySeparatorChar);
@@ -289,7 +288,7 @@ namespace GMap.NET
       /// <returns></returns>
       public bool OptimizeMapDb(string file)
       {
-         if(PrimaryCache is GMap.NET.CacheProviders.SQLitePureImageCache)
+         if(PrimaryCache is CacheProviders.SQLitePureImageCache)
          {
             if(string.IsNullOrEmpty(file))
             {

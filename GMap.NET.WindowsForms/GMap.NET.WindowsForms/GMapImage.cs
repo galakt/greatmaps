@@ -1,14 +1,13 @@
-﻿
+﻿using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
+using System;
+using System.Diagnostics;
+using GMap.NET.Internals;
+using GMap.NET.MapProviders;
+
 namespace GMap.NET.WindowsForms
 {
-   using System.Drawing;
-   using System.IO;
-   using System.Drawing.Imaging;
-   using System;
-   using System.Diagnostics;
-   using GMap.NET.Internals;
-   using GMap.NET.MapProviders;
-
    /// <summary>
    /// image abstraction
    /// </summary>
@@ -85,7 +84,7 @@ namespace GMap.NET.WindowsForms
          return ret;
       }
 
-      public override bool Save(Stream stream, GMap.NET.PureImage image)
+      public override bool Save(Stream stream, PureImage image)
       {
          GMapImage ret = image as GMapImage;
          bool ok = true;

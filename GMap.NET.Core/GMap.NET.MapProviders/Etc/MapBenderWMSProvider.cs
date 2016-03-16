@@ -1,10 +1,9 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+using System.Globalization;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-   using System.Globalization;
-
    /// <summary>
    /// MapBender provider, WMS demo http://www.mapbender.org/
    /// </summary>

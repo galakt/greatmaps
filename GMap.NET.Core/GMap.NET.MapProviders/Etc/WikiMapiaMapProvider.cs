@@ -1,9 +1,8 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-
    public abstract class WikiMapiaMapProviderBase : GMapProvider
    {
       public WikiMapiaMapProviderBase()

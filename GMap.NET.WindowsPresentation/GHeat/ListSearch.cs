@@ -11,12 +11,12 @@ namespace GMap.NET.WindowsPresentation.GHeat
    /// </summary>
    public class ListSearch
    {
-      private GMap.NET.PointLatLng _topLeftBound;
-      private GMap.NET.PointLatLng _lowerRightBound;
-      List<GMap.NET.PointLatLng> _list;
+      private PointLatLng _topLeftBound;
+      private PointLatLng _lowerRightBound;
+      List<PointLatLng> _list;
       private List<System.Threading.Thread> _threadTracking;
       private Object _threadLocker = new Object();
-      private List<GMap.NET.PointLatLng> _returnList;
+      private List<PointLatLng> _returnList;
 
       public class ListInstructions
       {
@@ -24,20 +24,20 @@ namespace GMap.NET.WindowsPresentation.GHeat
          public int endSearchIndex;
       }
 
-      public ListSearch(List<GMap.NET.PointLatLng> list, GMap.NET.PointLatLng topLeftBound, GMap.NET.PointLatLng lowerRightBound)
+      public ListSearch(List<PointLatLng> list, PointLatLng topLeftBound, PointLatLng lowerRightBound)
       {
          _topLeftBound = topLeftBound;
          _lowerRightBound = lowerRightBound;
          _list = list;
          _threadTracking = new List<System.Threading.Thread>();
-         _returnList = new List<GMap.NET.PointLatLng>();
+         _returnList = new List<PointLatLng>();
       }
 
-      public IEnumerable<GMap.NET.PointLatLng> GetMatchingPoints()
+      public IEnumerable<PointLatLng> GetMatchingPoints()
       {
          System.Threading.Thread newThread;
          int split = _list.Count() / Environment.ProcessorCount;
-         List<GMap.NET.PointLatLng> tempList = new List<GMap.NET.PointLatLng>();
+         List<PointLatLng> tempList = new List<PointLatLng>();
 
          //Create a thread for every processor on the computer
          for (int i = 0; i < Environment.ProcessorCount; i++)
@@ -57,8 +57,8 @@ namespace GMap.NET.WindowsPresentation.GHeat
       private void DivideAndConquer(object instructions)
       {
          ListInstructions listInstruction = (ListInstructions)instructions;
-         List<GMap.NET.PointLatLng> tempList = new List<GMap.NET.PointLatLng>();
-         GMap.NET.PointLatLng point;
+         List<PointLatLng> tempList = new List<PointLatLng>();
+         PointLatLng point;
 
          for (int i = listInstruction.startSearchIndex; i < listInstruction.endSearchIndex; i++)
          {

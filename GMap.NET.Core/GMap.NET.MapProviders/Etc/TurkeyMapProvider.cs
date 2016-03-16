@@ -1,9 +1,8 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-
    /// <summary>
    /// TurkeyMap provider, http://maps.pergo.com.tr/
    /// </summary>

@@ -1,11 +1,8 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-   using System.Net;
-   using System.Text;
-
    /// <summary>
    /// http://en.wikipedia.org/wiki/NearMap
    /// nearmap originally allowed personal use of images for free for non-enterprise users.

@@ -1,17 +1,16 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
+using GMap.NET.Internals;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using System.Threading;
+using System.Windows.Threading;
+
 namespace GMap.NET.WindowsPresentation
 {
-   using System;
-   using System.Collections.Generic;
-   using System.ComponentModel;
-   using System.Windows;
-   using System.Windows.Input;
-   using GMap.NET.Internals;
-   using GMap.NET;
-   using GMap.NET.MapProviders;
-   using System.Threading;
-   using System.Windows.Threading;
-
    /// <summary>
    /// form helping to prefetch tiles on local db
    /// </summary>
@@ -25,7 +24,7 @@ namespace GMap.NET.WindowsPresentation
       int all;
       public bool ShowCompleteMessage = false;
       RectLatLng area;
-      GMap.NET.GSize maxOfTiles;
+      GSize maxOfTiles;
 
       public TilePrefetcher()
       {

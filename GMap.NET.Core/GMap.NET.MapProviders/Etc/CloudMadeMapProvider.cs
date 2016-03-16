@@ -1,14 +1,13 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+using System.Globalization;
+using GMap.NET.Internals;
+using System.Collections.Generic;
+using System.Xml;
+using System.Diagnostics;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-   using System.Globalization;
-   using GMap.NET.Internals;
-   using System.Collections.Generic;
-   using System.Xml;
-   using System.Diagnostics;
-
    public abstract class CloudMadeMapProviderBase : GMapProvider, IRoutingProvider, DirectionsProvider
    {
       public readonly string ServerLetters = "abc";

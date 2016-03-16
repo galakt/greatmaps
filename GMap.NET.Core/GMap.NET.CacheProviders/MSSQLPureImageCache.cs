@@ -1,12 +1,11 @@
-﻿
+﻿using System;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using GMap.NET.MapProviders;
+
 namespace GMap.NET.CacheProviders
 {
-   using System;
-   using System.Data.SqlClient;
-   using System.Diagnostics;
-   using System.IO;
-   using GMap.NET.MapProviders;
-
    /// <summary>
    /// image cache for ms sql server
    /// optimized by mmurfinsimmons@gmail.com

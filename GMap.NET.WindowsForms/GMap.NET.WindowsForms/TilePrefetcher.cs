@@ -1,17 +1,15 @@
-﻿
-namespace GMap.NET
-{
-   using System.Collections.Generic;
-   using System.ComponentModel;
-   using System.Windows.Forms;
-   using GMap.NET.Internals;
-   using System;
-   using GMap.NET.MapProviders;
-   using System.Threading;
-   using GMap.NET.WindowsForms;
-   using GMap.NET.WindowsForms.Markers;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using GMap.NET.Internals;
+using System;
+using GMap.NET.MapProviders;
+using System.Threading;
+using GMap.NET.WindowsForms;
 using System.Drawing;
 
+namespace GMap.NET
+{
    /// <summary>
    /// form helping to prefetch tiles on local db
    /// </summary>
@@ -25,7 +23,7 @@ using System.Drawing;
       int all;
       public bool ShowCompleteMessage = false;
       RectLatLng area;
-      GMap.NET.GSize maxOfTiles;
+      GSize maxOfTiles;
       public GMapOverlay Overlay;
       int retry;
       public bool Shuffle = true;

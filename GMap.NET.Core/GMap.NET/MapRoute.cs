@@ -1,11 +1,10 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GMap.NET.MapProviders;
+
 namespace GMap.NET
 {
-   using System;
-   using System.Collections.Generic;
-   using System.Runtime.Serialization;
-   using GMap.NET.MapProviders;
-
    /// <summary>
    /// represents route of map
    /// </summary>

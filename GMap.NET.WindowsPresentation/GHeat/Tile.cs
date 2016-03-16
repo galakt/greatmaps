@@ -40,7 +40,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="changeOpacityWithZoom">If false the default opacity is used instead of a changing value</param>
       /// <param name="defaultOpacity">Used when change opacity with zoom is false</param>
       /// <returns></returns>
-      public static Bitmap Generate(Bitmap colorScheme, Bitmap dot, int zoom, int tileX, int tileY, GMap.NET.GPoint[] points, bool changeOpacityWithZoom, int defaultOpacity)
+      public static Bitmap Generate(Bitmap colorScheme, Bitmap dot, int zoom, int tileX, int tileY, GPoint[] points, bool changeOpacityWithZoom, int defaultOpacity)
       {
          int expandedWidth;
          int expandedHeight;
@@ -168,7 +168,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="tile"></param>
       /// <param name="points"></param>
       /// <returns></returns>
-      public static Bitmap AddPoints(Bitmap tile, Bitmap dot, GMap.NET.GPoint[] points)
+      public static Bitmap AddPoints(Bitmap tile, Bitmap dot, GPoint[] points)
       {
          ImageBlender blender = new ImageBlender();
 

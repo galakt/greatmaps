@@ -1,10 +1,9 @@
-﻿
+﻿using System;
+using GMap.NET.Projections;
+using GMap.NET.Internals;
+
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using GMap.NET.Projections;
-   using GMap.NET.Internals;
-
    public abstract class YandexMapProviderBase : GMapProvider
    {
       #region GMapProvider Members

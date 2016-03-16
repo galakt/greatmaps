@@ -732,7 +732,7 @@ namespace GMap.NET.WindowsPresentation
 
             _core.SystemType = "WindowsPresentation";
 
-            _core.RenderMode = GMap.NET.RenderMode.WPF;
+            _core.RenderMode = RenderMode.WPF;
 
             Overlays.CollectionChanged += OverlaysOnCollectionChanged;
             _core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
@@ -1073,7 +1073,7 @@ namespace GMap.NET.WindowsPresentation
                      {
                         Ix = (long) Math.Pow(2, zoomOffset);
                         parentTile = _core.Matrix.GetTileWithNoLock(_core.Zoom - zoomOffset++,
-                           new GMap.NET.GPoint((int) (tilePoint.PosXY.X/Ix), (int) (tilePoint.PosXY.Y/Ix)));
+                           new GPoint((int) (tilePoint.PosXY.X/Ix), (int) (tilePoint.PosXY.Y/Ix)));
                      }
 
                      if (parentTile.NotEmpty)
@@ -1813,8 +1813,8 @@ namespace GMap.NET.WindowsPresentation
                System.Windows.Point p = e.GetPosition(this);
                _selectionEnd = FromLocalToLatLng((int) p.X, (int) p.Y);
                {
-                  GMap.NET.PointLatLng p1 = _selectionStart;
-                  GMap.NET.PointLatLng p2 = _selectionEnd;
+                  PointLatLng p1 = _selectionStart;
+                  PointLatLng p2 = _selectionEnd;
 
                   double x1 = Math.Min(p1.Lng, p2.Lng);
                   double y1 = Math.Max(p1.Lat, p2.Lat);
@@ -2209,9 +2209,9 @@ namespace GMap.NET.WindowsPresentation
          set { _core.CanDragMap = value; }
       }
 
-      public GMap.NET.RenderMode RenderMode
+      public RenderMode RenderMode
       {
-         get { return GMap.NET.RenderMode.WPF; }
+         get { return RenderMode.WPF; }
       }
 
 

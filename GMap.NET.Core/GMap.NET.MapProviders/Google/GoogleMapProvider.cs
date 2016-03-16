@@ -1,23 +1,22 @@
-﻿
-namespace GMap.NET.MapProviders
-{
-    using System;
-    using GMap.NET.Projections;
-    using System.Security.Cryptography;
-    using System.Diagnostics;
-    using System.Net;
-    using System.IO;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using GMap.NET.Internals;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Xml;
-    using System.Text;
+﻿using System;
+using GMap.NET.Projections;
+using System.Security.Cryptography;
+using System.Diagnostics;
+using System.Net;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading;
+using GMap.NET.Internals;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
+using System.Text;
 #if PocketPC
     using OpenNETCF.Security.Cryptography;
 #endif
 
+namespace GMap.NET.MapProviders
+{
     public abstract class GoogleMapProviderBase : GMapProvider, IRoutingProvider, IGeocodingProvider, DirectionsProvider
     {
         public GoogleMapProviderBase()

@@ -939,7 +939,7 @@ namespace GMap.NET.Internals
                               while(img == null && zoomOffset < task.Value.Zoom)
                               {
                                  Ix = (long)Math.Pow(2, zoomOffset);
-                                 parentTile = new GMap.NET.GPoint((task.Value.Pos.X / Ix), (task.Value.Pos.Y / Ix));
+                                 parentTile = new GPoint((task.Value.Pos.X / Ix), (task.Value.Pos.Y / Ix));
                                  img = GMaps.Instance.GetImageFrom(tl, parentTile, task.Value.Zoom - zoomOffset++, out ex);
                               }
 

@@ -1,12 +1,11 @@
-﻿
+﻿using System;
+using System.Drawing;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+using GMap.NET.ObjectModel;
+
 namespace GMap.NET.WindowsForms
 {
-   using System;
-   using System.Drawing;
-   using System.Runtime.Serialization;
-   using System.Windows.Forms;
-   using GMap.NET.ObjectModel;
-
    /// <summary>
    /// GMap.NET overlay
    /// </summary>

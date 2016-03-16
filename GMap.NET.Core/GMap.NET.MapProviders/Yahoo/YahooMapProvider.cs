@@ -1,14 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Xml;
+using GMap.NET.Internals;
+using GMap.NET.Projections;
 
 namespace GMap.NET.MapProviders
 {
-   using System;
-   using System.Collections.Generic;
-   using System.Diagnostics;
-   using System.Globalization;
-   using System.Xml;
-   using GMap.NET.Internals;
-   using GMap.NET.Projections;
-
    public abstract class YahooMapProviderBase : GMapProvider, IGeocodingProvider
    {
       public YahooMapProviderBase()

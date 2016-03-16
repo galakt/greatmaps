@@ -1,8 +1,7 @@
-﻿
+﻿using GMap.NET.MapProviders;
+
 namespace GMap.NET
 {
-   using GMap.NET.MapProviders;
-
    public delegate void PositionChanged(PointLatLng point);
 
    public delegate void TileLoadComplete(long ElapsedMilliseconds);

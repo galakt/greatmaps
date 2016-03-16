@@ -1,15 +1,14 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using GMap.NET.Internals;
+using GMap.NET.MapProviders;
+
 namespace GMap.NET.WindowsPresentation
 {
-   using System.Collections.Generic;
-   using System.Collections.ObjectModel;
-   using System.Diagnostics;
-   using System.Windows;
-   using System.Windows.Media;
-   using System.Windows.Media.Imaging;
-   using GMap.NET.Internals;
-   using GMap.NET.MapProviders;
-
    /// <summary>
    /// image abstraction
    /// </summary>

@@ -18,8 +18,8 @@ namespace GMap.NET.WindowsPresentation.GHeat
    /// </summary>
    public class PointManager
    {
-      List<GMap.NET.PointLatLng> _pointList;
-      private GMap.NET.Projections.MercatorProjection _projection = new GMap.NET.Projections.MercatorProjection();
+      List<PointLatLng> _pointList;
+      private Projections.MercatorProjection _projection = new Projections.MercatorProjection();
       IWeightHandler _weightHandler;
 
       public PointManager() : this(null) { }
@@ -30,7 +30,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="weightHandle"></param>
       public PointManager(IWeightHandler weightHandle)
       {
-         _pointList = new List<GMap.NET.PointLatLng>();
+         _pointList = new List<PointLatLng>();
          _weightHandler = weightHandle;
       }
 
@@ -38,7 +38,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// Adds the point to the list. Also applies the weight to the point when their is point data
       /// </summary>
       /// <param name="point"></param>
-      public void AddPoint(GMap.NET.PointLatLng point)
+      public void AddPoint(PointLatLng point)
       {
          //Apply the weight to the new point
          if (_weightHandler != null && point.Data != null) point.Weight = _weightHandler.Evaluate(point.Data);
@@ -49,7 +49,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// Adds the points to the list. Also applies the weight to the point when their is point data
       /// </summary>
       /// <param name="points"></param>
-      public void AddPoint(GMap.NET.PointLatLng[] points)
+      public void AddPoint(PointLatLng[] points)
       {
          //Apply the weight to the new point
          if (_weightHandler != null)
@@ -64,7 +64,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// </summary>
       public void UpdatePointWeights()
       {
-         GMap.NET.PointLatLng tempPoint;
+         PointLatLng tempPoint;
          if (_weightHandler == null)
             throw new NoWeightHandler("Point weights can't be updated because a weight handler was not specified");
          else
@@ -107,7 +107,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
             item = line.Split(',');
             var lat = double.Parse(item[1]);
             var ln = double.Parse(item[2]);
-            _pointList.Add(new GMap.NET.PointLatLng(double.Parse(item[1]), double.Parse(item[2]), null, weight));
+            _pointList.Add(new PointLatLng(double.Parse(item[1]), double.Parse(item[2]), null, weight));
          }
       }
 
@@ -125,7 +125,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
             var lat = double.Parse(item[1], new NumberFormatInfo() { CurrencyDecimalSeparator = "." });
             var ln = double.Parse(item[2], new NumberFormatInfo() { CurrencyDecimalSeparator = "." });
 
-            _pointList.Add(new GMap.NET.PointLatLng(lat, ln));
+            _pointList.Add(new PointLatLng(lat, ln));
          }
       }
 
@@ -136,30 +136,30 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="pixelsFromCenter">diameter</param>
       /// <param name="zoom">current zoom</param>
       /// <returns></returns>
-      public GMap.NET.GPoint[] GetPointsAroundCenter(GMap.NET.PointLatLng center, int pixelsFromCenter, int zoom)
+      public GPoint[] GetPointsAroundCenter(PointLatLng center, int pixelsFromCenter, int zoom)
       {
-         GMap.NET.GPoint centerAsPixels;
-         GMap.NET.GPoint tlb;
-         GMap.NET.GPoint lrb;
-         List<GMap.NET.GPoint> points = new List<GPoint>();
-         GMap.NET.GSize max_lrb;
-         GMap.NET.GSize min_tlb;
-         GMap.NET.GPoint tempPoint;
+         GPoint centerAsPixels;
+         GPoint tlb;
+         GPoint lrb;
+         List<GPoint> points = new List<GPoint>();
+         GSize max_lrb;
+         GSize min_tlb;
+         GPoint tempPoint;
 
 
          centerAsPixels = _projection.FromLatLngToPixel(center, zoom);
          min_tlb = _projection.GetTileMatrixMinXY(zoom);
          max_lrb = _projection.GetTileMatrixMaxXY(zoom);
 
-         tlb = new GMap.NET.GPoint(
+         tlb = new GPoint(
                           centerAsPixels.X - pixelsFromCenter,
                           centerAsPixels.Y - pixelsFromCenter);
 
-         lrb = new GMap.NET.GPoint(
+         lrb = new GPoint(
                         centerAsPixels.X + pixelsFromCenter,
                         centerAsPixels.Y + pixelsFromCenter);
 
-         foreach (GMap.NET.PointLatLng llPoint in GetList(tlb, lrb, zoom, false))
+         foreach (PointLatLng llPoint in GetList(tlb, lrb, zoom, false))
          {
             //Add the point to the list
             tempPoint = _projection.FromLatLngToPixel(llPoint.Lat, llPoint.Lng, zoom);
@@ -179,28 +179,28 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="zoom"></param>
       /// <param name="newMethod"></param>
       /// <returns></returns>
-      public GMap.NET.GPoint[] GetPointsForTile(int x, int y, System.Drawing.Bitmap dot, int zoom, bool newMethod)
+      public GPoint[] GetPointsForTile(int x, int y, System.Drawing.Bitmap dot, int zoom, bool newMethod)
       {
-         List<GMap.NET.GPoint> points = new List<GMap.NET.GPoint>();
-         GMap.NET.GSize maxTileSize;
-         GMap.NET.GPoint adjustedPoint;
-         GMap.NET.GPoint pixelCoordinate;
-         GMap.NET.GPoint mapPoint;
+         List<GPoint> points = new List<GPoint>();
+         GSize maxTileSize;
+         GPoint adjustedPoint;
+         GPoint pixelCoordinate;
+         GPoint mapPoint;
 
          maxTileSize = _projection.GetTileMatrixMaxXY(zoom);
          //Top Left Bounds
-         GMap.NET.GPoint tlb = _projection.FromTileXYToPixel(new GMap.NET.GPoint(x, y));
+         GPoint tlb = _projection.FromTileXYToPixel(new GPoint(x, y));
 
-         maxTileSize = new GMap.NET.GSize(GHeat.SIZE, GHeat.SIZE);
+         maxTileSize = new GSize(GHeat.SIZE, GHeat.SIZE);
          //Lower right bounds
-         GMap.NET.GPoint lrb = new GMap.NET.GPoint((tlb.X + maxTileSize.Width) + dot.Width, (tlb.Y + maxTileSize.Height) + dot.Width);
+         GPoint lrb = new GPoint((tlb.X + maxTileSize.Width) + dot.Width, (tlb.Y + maxTileSize.Height) + dot.Width);
 
          //pad the Top left bounds
-         tlb = new GMap.NET.GPoint(tlb.X - dot.Width, tlb.Y - dot.Height);
+         tlb = new GPoint(tlb.X - dot.Width, tlb.Y - dot.Height);
 
 
          //Go throught the list and convert the points to pixel cooridents
-         foreach (GMap.NET.PointLatLng llPoint in GetList(tlb, lrb, zoom, newMethod))
+         foreach (PointLatLng llPoint in GetList(tlb, lrb, zoom, newMethod))
          {
             //Now go through the list and turn it into pixel points
             pixelCoordinate = _projection.FromLatLngToPixel(llPoint.Lat, llPoint.Lng, zoom);
@@ -213,7 +213,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
             mapPoint.Data = pixelCoordinate.Data;
 
             //Adjust the point to the specific tile
-            adjustedPoint = AdjustMapPixelsToTilePixels(new GMap.NET.GPoint(x, y), pixelCoordinate);
+            adjustedPoint = AdjustMapPixelsToTilePixels(new GPoint(x, y), pixelCoordinate);
 
             //Make sure the weight and data is still pointing after the conversion
             adjustedPoint.Data = pixelCoordinate.Data;
@@ -230,7 +230,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// Gets all of the points in the list (Lat Lng Format)
       /// </summary>
       /// <returns></returns>
-      public GMap.NET.PointLatLng[] GetAllPoints()
+      public PointLatLng[] GetAllPoints()
       {
          return _pointList.ToArray();
       }
@@ -243,13 +243,13 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="zoom"></param>
       /// <param name="newMethod"></param>
       /// <returns></returns>
-      protected GMap.NET.PointLatLng[] GetList(GMap.NET.GPoint tlb, GMap.NET.GPoint lrb, int zoom, bool newMethod)
+      protected PointLatLng[] GetList(GPoint tlb, GPoint lrb, int zoom, bool newMethod)
       {
-         List<GMap.NET.GPoint> points = new List<GMap.NET.GPoint>();
-         IEnumerable<GMap.NET.PointLatLng> llList;
+         List<GPoint> points = new List<GPoint>();
+         IEnumerable<PointLatLng> llList;
 
-         GMap.NET.PointLatLng ptlb;
-         GMap.NET.PointLatLng plrb;
+         PointLatLng ptlb;
+         PointLatLng plrb;
 
          ptlb = _projection.FromPixelToLatLng(tlb, zoom);
          plrb = _projection.FromPixelToLatLng(lrb, zoom);
@@ -278,9 +278,9 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <param name="tileXYPoint"></param>
       /// <param name="mapPixelPoint"></param>
       /// <returns></returns>
-      public static GMap.NET.GPoint AdjustMapPixelsToTilePixels(GMap.NET.GPoint tileXYPoint, GMap.NET.GPoint mapPixelPoint)
+      public static GPoint AdjustMapPixelsToTilePixels(GPoint tileXYPoint, GPoint mapPixelPoint)
       {
-         return new GMap.NET.GPoint(mapPixelPoint.X - (tileXYPoint.X * GHeat.SIZE), mapPixelPoint.Y - (tileXYPoint.Y * GHeat.SIZE));
+         return new GPoint(mapPixelPoint.X - (tileXYPoint.X * GHeat.SIZE), mapPixelPoint.Y - (tileXYPoint.Y * GHeat.SIZE));
       }
    }
 }

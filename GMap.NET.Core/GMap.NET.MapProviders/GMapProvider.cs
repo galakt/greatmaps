@@ -1,16 +1,15 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using GMap.NET.Internals;
+using GMap.NET.Projections;
+using System.Text;
+using System.Security.Cryptography;
+
 namespace GMap.NET.MapProviders
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Net;    
-    using GMap.NET.Internals;
-    using GMap.NET.Projections;
-    using System.Text;
-    using System.Security.Cryptography;
-
     /// <summary>
     /// providers that are already build in
     /// </summary>

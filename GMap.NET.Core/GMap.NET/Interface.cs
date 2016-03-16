@@ -1,4 +1,5 @@
-﻿
+﻿using GMap.NET.MapProviders;
+
 namespace GMap.NET
 {
    using GMap.NET.MapProviders;

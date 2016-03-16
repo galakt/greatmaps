@@ -1,29 +1,28 @@
-﻿
-namespace GMap.NET.WindowsForms
-{
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Threading;
-    using System.Windows.Forms;
-    using GMap.NET;
-    using GMap.NET.Internals;
-    using GMap.NET.ObjectModel;
-    using System.Diagnostics;
-    using System.Drawing.Text;
-    using GMap.NET.MapProviders;
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using GMap.NET;
+using GMap.NET.Internals;
+using GMap.NET.ObjectModel;
+using System.Diagnostics;
+using System.Drawing.Text;
+using GMap.NET.MapProviders;
 
 #if !PocketPC
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Collections.Generic;
-    using GMap.NET.Projections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using GMap.NET.Projections;
 #else
    using OpenNETCF.ComponentModel;
 #endif
 
+namespace GMap.NET.WindowsForms
+{
     /// <summary>
     /// GMap.NET control for Windows Forms
     /// </summary>   
@@ -570,7 +569,7 @@ namespace GMap.NET.WindowsForms
                 if (GMaps.Instance.IsRunningOnMono)
                 {
                     // no imports to move pointer
-                    MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionWithoutCenter;
+                    MouseWheelZoomType = MouseWheelZoomType.MousePositionWithoutCenter;
                 }
 
                 Overlays.CollectionChanged += new NotifyCollectionChangedEventHandler(Overlays_CollectionChanged);
@@ -2035,8 +2034,8 @@ namespace GMap.NET.WindowsForms
                 {
                     selectionEnd = FromLocalToLatLng(e.X, e.Y);
                     {
-                        GMap.NET.PointLatLng p1 = selectionStart;
-                        GMap.NET.PointLatLng p2 = selectionEnd;
+                        PointLatLng p1 = selectionStart;
+                        PointLatLng p2 = selectionEnd;
 
                         double x1 = Math.Min(p1.Lng, p2.Lng);
                         double y1 = Math.Max(p1.Lat, p2.Lat);

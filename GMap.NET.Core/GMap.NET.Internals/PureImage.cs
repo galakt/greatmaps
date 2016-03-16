@@ -1,9 +1,8 @@
-﻿
+﻿using System;
+using System.IO;
+
 namespace GMap.NET
 {
-   using System;
-   using System.IO;
-
    /// <summary>
    /// image abstraction proxy
    /// </summary>
