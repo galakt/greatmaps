@@ -184,7 +184,7 @@
     <Compile Include="GHeat\ListSearch.cs" />
     <Compile Include="GHeat\Opacity.cs" />
     <Compile Include="GHeat\PointManager.cs" />
-    <Compile Include="GHeat\Settings.cs" />
+    <Compile Include="GHeat\SchemeNames.cs" />
     <Compile Include="GHeat\Tile.cs" />
     <Compile Include="GMap.NET.CacheProviders\MemoryCache.cs" />
     <Compile Include="GMap.NET.Internals\SocksProxySocket\SocksHttpWebRequest.cs" />

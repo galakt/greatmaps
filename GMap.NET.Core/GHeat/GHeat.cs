@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace GMap.NET.GHeat
 {
@@ -15,21 +16,15 @@ namespace GMap.NET.GHeat
                                       /// <summary>
                                       /// Dots folder
                                       /// </summary>
-      public const string DOTS_FOLDER = "Dots";
-      /// <summary>
-      /// Color scheme folder name
-      /// </summary>
-      public const string COLOR_SCHMES_FOLDER = "ColorSchemes";
-
       /// <summary>
       /// Contains a cache of dot images
       /// </summary>
-      private static Dictionary<string, Bitmap> dotsList;
+      private static Dictionary<string, Bitmap> _dotsList;
 
       /// <summary>
       /// Contains a cache of color schemes
       /// </summary>
-      private static Dictionary<string, Bitmap> colorSchemeList;
+      private static Dictionary<SchemeNames, Bitmap> _colorSchemeDictionary;
 
       private static GHeat _nonWebInstance = new GHeat();
       /// <summary>
@@ -42,56 +37,43 @@ namespace GMap.NET.GHeat
       /// </summary>
       private GHeat()
       {
-         //string directory = Settings.BaseDirectory;
-         dotsList = new Dictionary<string, Bitmap>();
-         colorSchemeList = new Dictionary<string, Bitmap>();
+         _dotsList = new Dictionary<string, Bitmap>();
+         _colorSchemeDictionary = new Dictionary<SchemeNames, Bitmap>();
 
-         //foreach (string file in System.IO.Directory.GetFiles(directory + DOTS_FOLDER, "*." + ImageFormat.Png.ToString().ToLower()))
-         //   dotsList.Add(Path.GetFileName(file), new Bitmap(file));
-
-
-
-
-
-
-
-         dotsList.Add("dot0.png", Properties.Resources.dot0);
-         dotsList.Add("dot1.png", Properties.Resources.dot1);
-         dotsList.Add("dot2.png", Properties.Resources.dot2);
-         dotsList.Add("dot3.png", Properties.Resources.dot3);
-         dotsList.Add("dot4.png", Properties.Resources.dot4);
-         dotsList.Add("dot5.png", Properties.Resources.dot5);
-         dotsList.Add("dot6.png", Properties.Resources.dot6);
-         dotsList.Add("dot7.png", Properties.Resources.dot7);
-         dotsList.Add("dot8.png", Properties.Resources.dot8);
-         dotsList.Add("dot9.png", Properties.Resources.dot9);
-         dotsList.Add("dot10.png", Properties.Resources.dot10);
-         dotsList.Add("dot11.png", Properties.Resources.dot11);
-         dotsList.Add("dot12.png", Properties.Resources.dot12);
-         dotsList.Add("dot13.png", Properties.Resources.dot13);
-         dotsList.Add("dot14.png", Properties.Resources.dot14);
-         dotsList.Add("dot15.png", Properties.Resources.dot15);
-         dotsList.Add("dot16.png", Properties.Resources.dot16);
-         dotsList.Add("dot17.png", Properties.Resources.dot17);
-         dotsList.Add("dot18.png", Properties.Resources.dot18);
-         dotsList.Add("dot19.png", Properties.Resources.dot19);
-         dotsList.Add("dot20.png", Properties.Resources.dot20);
-         dotsList.Add("dot21.png", Properties.Resources.dot21);
-         dotsList.Add("dot22.png", Properties.Resources.dot22);
-         dotsList.Add("dot23.png", Properties.Resources.dot23);
-         dotsList.Add("dot24.png", Properties.Resources.dot24);
-         dotsList.Add("dot25.png", Properties.Resources.dot25);
-         dotsList.Add("dot26.png", Properties.Resources.dot26);
-         dotsList.Add("dot27.png", Properties.Resources.dot27);
-         dotsList.Add("dot28.png", Properties.Resources.dot28);
-         dotsList.Add("dot29.png", Properties.Resources.dot29);
-         dotsList.Add("dot30.png", Properties.Resources.dot30);
+         _dotsList.Add("dot0", Properties.Resources.dot0);
+         _dotsList.Add("dot1", Properties.Resources.dot1);
+         _dotsList.Add("dot2", Properties.Resources.dot2);
+         _dotsList.Add("dot3", Properties.Resources.dot3);
+         _dotsList.Add("dot4", Properties.Resources.dot4);
+         _dotsList.Add("dot5", Properties.Resources.dot5);
+         _dotsList.Add("dot6", Properties.Resources.dot6);
+         _dotsList.Add("dot7", Properties.Resources.dot7);
+         _dotsList.Add("dot8", Properties.Resources.dot8);
+         _dotsList.Add("dot9", Properties.Resources.dot9);
+         _dotsList.Add("dot10", Properties.Resources.dot10);
+         _dotsList.Add("dot11", Properties.Resources.dot11);
+         _dotsList.Add("dot12", Properties.Resources.dot12);
+         _dotsList.Add("dot13", Properties.Resources.dot13);
+         _dotsList.Add("dot14", Properties.Resources.dot14);
+         _dotsList.Add("dot15", Properties.Resources.dot15);
+         _dotsList.Add("dot16", Properties.Resources.dot16);
+         _dotsList.Add("dot17", Properties.Resources.dot17);
+         _dotsList.Add("dot18", Properties.Resources.dot18);
+         _dotsList.Add("dot19", Properties.Resources.dot19);
+         _dotsList.Add("dot20", Properties.Resources.dot20);
+         _dotsList.Add("dot21", Properties.Resources.dot21);
+         _dotsList.Add("dot22", Properties.Resources.dot22);
+         _dotsList.Add("dot23", Properties.Resources.dot23);
+         _dotsList.Add("dot24", Properties.Resources.dot24);
+         _dotsList.Add("dot25", Properties.Resources.dot25);
+         _dotsList.Add("dot26", Properties.Resources.dot26);
+         _dotsList.Add("dot27", Properties.Resources.dot27);
+         _dotsList.Add("dot28", Properties.Resources.dot28);
+         _dotsList.Add("dot29", Properties.Resources.dot29);
+         _dotsList.Add("dot30", Properties.Resources.dot30);
 
 
-         colorSchemeList.Add("classic.png", Properties.Resources.classic);
-         //var ff = Properties.Resources.CreateTileDb//Properties.Resources.ResourceManager.
-         //foreach (string file in System.IO.Directory.GetFiles(directory + COLOR_SCHMES_FOLDER, "*." + ImageFormat.Png.ToString().ToLower()))
-         //   colorSchemeList.Add(Path.GetFileName(file), new Bitmap(file));
+         _colorSchemeDictionary.Add(SchemeNames.Classic, Properties.Resources.classic);
       }
 
       /// <summary>
@@ -106,10 +88,9 @@ namespace GMap.NET.GHeat
       /// <param name="changeOpacityWithZoom"></param>
       /// <param name="defaultOpacity"> Default opacity when changeOpacityWithZoom is false</param>
       /// <returns></returns>
-      public static Bitmap GetTile(PointManager pm, string colorScheme, int zoom, int x, int y, bool newMethod, bool changeOpacityWithZoom, int defaultOpacity)
+      public static Bitmap GetTile(PointManager pm, SchemeNames colorScheme, int zoom, int x, int y, bool newMethod, bool changeOpacityWithZoom, int defaultOpacity)
       {
          //Do a little error checking
-         if (colorScheme == string.Empty) throw new Exception("A color scheme is required");
          if (pm == null) throw new Exception("No point manager has been specified");
          return Tile.Generate(GetColorScheme(colorScheme), GetDot(zoom), zoom, x, y, pm.GetPointsForTile(x, y, GetDot(zoom), zoom, newMethod), changeOpacityWithZoom, defaultOpacity);
       }
@@ -123,7 +104,7 @@ namespace GMap.NET.GHeat
       /// <param name="x"></param>
       /// <param name="y"></param>
       /// <returns></returns>
-      public static Bitmap GetTile(PointManager pm, string colorScheme, int zoom, int x, int y)
+      public static Bitmap GetTile(PointManager pm, SchemeNames colorScheme, int zoom, int x, int y)
       {
          return GetTile(pm, colorScheme, zoom, x, y, false, true, 0);
       }
@@ -135,10 +116,10 @@ namespace GMap.NET.GHeat
       /// <returns></returns>
       private static Bitmap GetDot(int zoom)
       {
-         var dot = dotsList["dot" + zoom.ToString() + "." + ImageFormat.Png.ToString().ToLower()];
+         var dot = _dotsList["dot" + zoom];
          lock (dot)
          {
-            return (Bitmap)dotsList["dot" + zoom.ToString() + "." + ImageFormat.Png.ToString().ToLower()].Clone();
+            return (Bitmap)dot.Clone();
          }
       }
 
@@ -147,25 +128,20 @@ namespace GMap.NET.GHeat
       /// </summary>
       /// <param name="schemeName"></param>
       /// <returns></returns>
-      public static Bitmap GetColorScheme(string schemeName)
+      public static Bitmap GetColorScheme(SchemeNames schemeName)
       {
-         if (!colorSchemeList.ContainsKey(schemeName + "." + ImageFormat.Png.ToString().ToLower()))
+         if (!_colorSchemeDictionary.ContainsKey(schemeName))
             throw new Exception("Color scheme '" + schemeName + " could not be found");
-         var scheme = colorSchemeList[schemeName + "." + ImageFormat.Png.ToString().ToLower()];
+         var scheme = _colorSchemeDictionary[schemeName];
          lock (scheme)
          {
-            return (Bitmap)colorSchemeList[schemeName + "." + ImageFormat.Png.ToString().ToLower()].Clone();
+            return (Bitmap)scheme.Clone();
          }
       }
 
-      public static string[] AvailableColorSchemes()
+      public static SchemeNames[] AvailableColorSchemes()
       {
-         List<string> colorSchemes = new List<string>();
-
-         //I dont want to return the file extention just the name
-         foreach (string key in colorSchemeList.Keys)
-            colorSchemes.Add(key.Replace("." + ImageFormat.Png.ToString().ToLower(), ""));
-         return colorSchemes.ToArray();
+         return _colorSchemeDictionary.Keys.ToArray();
       }
    }
 }

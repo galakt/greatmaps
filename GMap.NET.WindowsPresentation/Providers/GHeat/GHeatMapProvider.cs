@@ -27,7 +27,7 @@ namespace GMap.NET.WindowsPresentation.Providers.GHeat
 
       public override PureImage GetTileImage(GPoint pos, int zoom)
       {
-         Bitmap tempImage = GMap.NET.GHeat.GHeat.GetTile(_pointManager, "classic", zoom, (int)pos.X, (int)pos.Y, false, false, 150);
+         Bitmap tempImage = GMap.NET.GHeat.GHeat.GetTile(_pointManager, SchemeNames.Classic, zoom, (int)pos.X, (int)pos.Y, false, false, 150);
          ImageConverter ic = new ImageConverter();
          var ba = (byte[])ic.ConvertTo(tempImage, typeof(byte[]));
          return GMapImageProxy.Instance.FromArray(ba);
