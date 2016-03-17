@@ -1,4 +1,4 @@
-﻿namespace GMap.NET.WindowsPresentation.GHeat
+﻿namespace GMap.NET.GHeat
 {
    /// <summary>
    /// Interface used as a type of event listner.

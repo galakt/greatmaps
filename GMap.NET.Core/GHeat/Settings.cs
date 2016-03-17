@@ -1,4 +1,4 @@
-﻿namespace GMap.NET.WindowsPresentation.GHeat
+﻿namespace GMap.NET.GHeat
 {
    public class Settings
    {

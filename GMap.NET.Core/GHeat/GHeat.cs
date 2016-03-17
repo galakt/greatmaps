@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Resources;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// The base directory is set in the settings.
@@ -137,7 +135,11 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <returns></returns>
       private static Bitmap GetDot(int zoom)
       {
-         return dotsList["dot" + zoom.ToString() + "." + ImageFormat.Png.ToString().ToLower()];
+         var dot = dotsList["dot" + zoom.ToString() + "." + ImageFormat.Png.ToString().ToLower()];
+         lock (dot)
+         {
+            return (Bitmap)dotsList["dot" + zoom.ToString() + "." + ImageFormat.Png.ToString().ToLower()].Clone();
+         }
       }
 
       /// <summary>
@@ -149,7 +151,11 @@ namespace GMap.NET.WindowsPresentation.GHeat
       {
          if (!colorSchemeList.ContainsKey(schemeName + "." + ImageFormat.Png.ToString().ToLower()))
             throw new Exception("Color scheme '" + schemeName + " could not be found");
-         return colorSchemeList[schemeName + "." + ImageFormat.Png.ToString().ToLower()];
+         var scheme = colorSchemeList[schemeName + "." + ImageFormat.Png.ToString().ToLower()];
+         lock (scheme)
+         {
+            return (Bitmap)colorSchemeList[schemeName + "." + ImageFormat.Png.ToString().ToLower()].Clone();
+         }
       }
 
       public static string[] AvailableColorSchemes()

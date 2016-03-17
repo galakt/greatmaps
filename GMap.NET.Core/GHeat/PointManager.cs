@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// Thrown when no weight handler is set and some function is called requiring a weight handler

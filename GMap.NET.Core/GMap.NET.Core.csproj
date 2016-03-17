@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GMap.NET</RootNamespace>
     <AssemblyName>GMap.NET.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
@@ -41,6 +41,7 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +74,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
@@ -176,6 +178,14 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GHeat\GHeat.cs" />
+    <Compile Include="GHeat\ImageBlender.cs" />
+    <Compile Include="GHeat\IWeightHandler.cs" />
+    <Compile Include="GHeat\ListSearch.cs" />
+    <Compile Include="GHeat\Opacity.cs" />
+    <Compile Include="GHeat\PointManager.cs" />
+    <Compile Include="GHeat\Settings.cs" />
+    <Compile Include="GHeat\Tile.cs" />
     <Compile Include="GMap.NET.CacheProviders\MemoryCache.cs" />
     <Compile Include="GMap.NET.Internals\SocksProxySocket\SocksHttpWebRequest.cs" />
     <Compile Include="GMap.NET.Internals\DrawTile.cs" />
@@ -214,7 +224,6 @@
     <Compile Include="GMap.NET.MapProviders\Etc\MapBenderWMSProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Etc\SpainMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Etc\LatviaMapProvider.cs" />
-    <Compile Include="GMap.NET.MapProviders\GHeat\GHeatMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Lithuania\LithuaniaReliefMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Lithuania\LithuaniaHybridOldMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Lithuania\LithuaniaHybridMapProvider.cs" />
@@ -326,7 +335,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -353,7 +362,46 @@
   <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="GHeat\ColorSchemes\classic.png" />
+    <Resource Include="GHeat\ColorSchemes\fire.png" />
+    <Resource Include="GHeat\ColorSchemes\omg.png" />
+    <Resource Include="GHeat\ColorSchemes\pbj.png" />
+    <Resource Include="GHeat\ColorSchemes\pgaitch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="GHeat\Dots\dot0.png" />
+    <Resource Include="GHeat\Dots\dot1.png" />
+    <Resource Include="GHeat\Dots\dot10.png" />
+    <Resource Include="GHeat\Dots\dot11.png" />
+    <Resource Include="GHeat\Dots\dot12.png" />
+    <Resource Include="GHeat\Dots\dot13.png" />
+    <Resource Include="GHeat\Dots\dot14.png" />
+    <Resource Include="GHeat\Dots\dot15.png" />
+    <Resource Include="GHeat\Dots\dot16.png" />
+    <Resource Include="GHeat\Dots\dot17.png" />
+    <Resource Include="GHeat\Dots\dot18.png" />
+    <Resource Include="GHeat\Dots\dot19.png" />
+    <Resource Include="GHeat\Dots\dot2.png" />
+    <Resource Include="GHeat\Dots\dot20.png" />
+    <Resource Include="GHeat\Dots\dot21.png" />
+    <Resource Include="GHeat\Dots\dot22.png" />
+    <Resource Include="GHeat\Dots\dot23.png" />
+    <Resource Include="GHeat\Dots\dot24.png" />
+    <Resource Include="GHeat\Dots\dot25.png" />
+    <Resource Include="GHeat\Dots\dot26.png" />
+    <Resource Include="GHeat\Dots\dot27.png" />
+    <Resource Include="GHeat\Dots\dot28.png" />
+    <Resource Include="GHeat\Dots\dot29.png" />
+    <Resource Include="GHeat\Dots\dot3.png" />
+    <Resource Include="GHeat\Dots\dot30.png" />
+    <Resource Include="GHeat\Dots\dot4.png" />
+    <Resource Include="GHeat\Dots\dot5.png" />
+    <Resource Include="GHeat\Dots\dot6.png" />
+    <Resource Include="GHeat\Dots\dot7.png" />
+    <Resource Include="GHeat\Dots\dot8.png" />
+    <Resource Include="GHeat\Dots\dot9.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

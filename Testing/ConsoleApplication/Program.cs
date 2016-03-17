@@ -141,7 +141,8 @@ namespace ConsoleApplication
                     int x = 0;
                     int y = 0;
                     int z = 0;
-                    GMapProviders.BingMap.QuadKeyToTileXY(qk, out x, out y, out z);
+
+               //GMapProviders.BingMap.QuadKeyToTileXY(qk, out x, out y, out z);
 
                     Debug.WriteLine(c++ + " of " + total + ", x: " + x + ", y: " + y + ", z: " + z);
 

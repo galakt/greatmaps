@@ -2,9 +2,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Windows.Media.Imaging;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// http://www.codeproject.com/KB/GDI-plus/KVImageProcess.aspx
@@ -150,149 +149,152 @@ namespace GMap.NET.WindowsPresentation.GHeat
       public void BlendImages(Image destImage, int destX, int destY, int destWidth, int destHeight,
                         Image srcImage, int srcX, int srcY, BlendOperation BlendOp)
       {
-         if (destImage == null)
-            throw new Exception("Destination image must be provided");
-
-         if (destImage.Width < destX + destWidth || destImage.Height < destY + destHeight)
-            throw new Exception("Destination image is smaller than requested dimentions");
-
-         if (srcImage == null)
-            throw new Exception("Source image must be provided");
-
-         if (srcImage.Width < srcX + destWidth || srcImage.Height < srcY + destHeight)
-            throw new Exception("Source image is smaller than requested dimentions");
-
-         Bitmap tempBmp = null;
-         Graphics gr = Graphics.FromImage(destImage);
-         gr.CompositingMode = CompositingMode.SourceCopy;
-
-         switch (BlendOp)
+         lock (srcImage)
          {
-            case BlendOperation.SourceCopy:
-               gr.DrawImage(srcImage, new Rectangle(destX, destY, destWidth, destHeight),
+            if (destImage == null)
+               throw new Exception("Destination image must be provided");
+
+            if (destImage.Width < destX + destWidth || destImage.Height < destY + destHeight)
+               throw new Exception("Destination image is smaller than requested dimentions");
+
+            if (srcImage == null)
+               throw new Exception("Source image must be provided");
+
+            if (srcImage.Width < srcX + destWidth || srcImage.Height < srcY + destHeight)
+               throw new Exception("Source image is smaller than requested dimentions");
+
+            Bitmap tempBmp = null;
+            Graphics gr = Graphics.FromImage(destImage);
+            gr.CompositingMode = CompositingMode.SourceCopy;
+
+            switch (BlendOp)
+            {
+               case BlendOperation.SourceCopy:
+                  gr.DrawImage(srcImage, new Rectangle(destX, destY, destWidth, destHeight),
                      srcX, srcY, destWidth, destHeight, GraphicsUnit.Pixel);
-               break;
+                  break;
 
-            case BlendOperation.ROP_MergePaint:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                        ref srcImage, srcX, srcY, new PerChannelProcessDelegate(MergePaint));
-               break;
+               case BlendOperation.ROP_MergePaint:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(MergePaint));
+                  break;
 
-            case BlendOperation.ROP_NOTSourceErase:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(NOTSourceErase));
-               break;
+               case BlendOperation.ROP_NOTSourceErase:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(NOTSourceErase));
+                  break;
 
-            case BlendOperation.ROP_SourceAND:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceAND));
-               break;
+               case BlendOperation.ROP_SourceAND:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceAND));
+                  break;
 
-            case BlendOperation.ROP_SourceErase:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceErase));
-               break;
+               case BlendOperation.ROP_SourceErase:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceErase));
+                  break;
 
-            case BlendOperation.ROP_SourceInvert:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceInvert));
-               break;
+               case BlendOperation.ROP_SourceInvert:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourceInvert));
+                  break;
 
-            case BlendOperation.ROP_SourcePaint:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourcePaint));
-               break;
+               case BlendOperation.ROP_SourcePaint:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(SourcePaint));
+                  break;
 
-            case BlendOperation.Blend_Darken:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendDarken));
-               break;
+               case BlendOperation.Blend_Darken:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendDarken));
+                  break;
 
-            case BlendOperation.Blend_Multiply:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendMultiply));
-               break;
+               case BlendOperation.Blend_Multiply:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendMultiply));
+                  break;
 
-            case BlendOperation.Blend_Screen:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendScreen));
-               break;
+               case BlendOperation.Blend_Screen:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendScreen));
+                  break;
 
-            case BlendOperation.Blend_Lighten:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendLighten));
-               break;
+               case BlendOperation.Blend_Lighten:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendLighten));
+                  break;
 
-            case BlendOperation.Blend_HardLight:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendHardLight));
-               break;
+               case BlendOperation.Blend_HardLight:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendHardLight));
+                  break;
 
-            case BlendOperation.Blend_Difference:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendDifference));
-               break;
+               case BlendOperation.Blend_Difference:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendDifference));
+                  break;
 
-            case BlendOperation.Blend_PinLight:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendPinLight));
-               break;
+               case BlendOperation.Blend_PinLight:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendPinLight));
+                  break;
 
-            case BlendOperation.Blend_Overlay:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendOverlay));
-               break;
+               case BlendOperation.Blend_Overlay:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendOverlay));
+                  break;
 
-            case BlendOperation.Blend_Exclusion:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendExclusion));
-               break;
+               case BlendOperation.Blend_Exclusion:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendExclusion));
+                  break;
 
-            case BlendOperation.Blend_SoftLight:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendSoftLight));
-               break;
+               case BlendOperation.Blend_SoftLight:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendSoftLight));
+                  break;
 
-            case BlendOperation.Blend_ColorBurn:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendColorBurn));
-               break;
+               case BlendOperation.Blend_ColorBurn:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendColorBurn));
+                  break;
 
-            case BlendOperation.Blend_ColorDodge:
-               tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendColorDodge));
-               break;
+               case BlendOperation.Blend_ColorDodge:
+                  tempBmp = PerChannelProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new PerChannelProcessDelegate(BlendColorDodge));
+                  break;
 
-            case BlendOperation.Blend_Hue:
-               tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendHue));
-               break;
+               case BlendOperation.Blend_Hue:
+                  tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendHue));
+                  break;
 
-            case BlendOperation.Blend_Saturation:
-               tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendSaturation));
-               break;
+               case BlendOperation.Blend_Saturation:
+                  tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendSaturation));
+                  break;
 
-            case BlendOperation.Blend_Color:
-               tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendColor));
-               break;
+               case BlendOperation.Blend_Color:
+                  tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendColor));
+                  break;
 
-            case BlendOperation.Blend_Luminosity:
-               tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
-                  ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendLuminosity));
-               break;
+               case BlendOperation.Blend_Luminosity:
+                  tempBmp = RGBProcess(ref destImage, destX, destY, destWidth, destHeight,
+                     ref srcImage, srcX, srcY, new RGBProcessDelegate(BlendLuminosity));
+                  break;
+            }
+
+            if (tempBmp != null)
+            {
+               gr.DrawImage(tempBmp, 0, 0, tempBmp.Width, tempBmp.Height);
+               tempBmp.Dispose();
+               tempBmp = null;
+            }
+
+            gr.Dispose();
+            gr = null;
          }
-
-         if (tempBmp != null)
-         {
-            gr.DrawImage(tempBmp, 0, 0, tempBmp.Width, tempBmp.Height);
-            tempBmp.Dispose();
-            tempBmp = null;
-         }
-
-         gr.Dispose();
-         gr = null;
       }
 
 

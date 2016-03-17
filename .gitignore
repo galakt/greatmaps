@@ -286,3 +286,11 @@ Tools/MapCruncher/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
 GMap.NET.WindowsPresentation/obj/Debug/GMap.NET.WindowsPresentation.csproj.GenerateResource.Cache
 GMap.NET.WindowsPresentation/obj/Debug/GMap.NET.WindowsPresentation.Properties.Resources.resources
 GMap.NET.WindowsPresentation/obj/Debug/TempPE/Properties.Resources.Designer.cs.dll
+Build/Release-NETv3.5/Demo.WindowsForms.exe
+Build/Release-NETv3.5/Demo.WindowsForms.exe.config
+Build/Release-NETv3.5/GMap.NET.WindowsForms.dll
+Build/Release-NETv3.5/GMap.NET.WindowsForms.xml
+GMap.NET.Core/obj/Release/GMap.NET.Core.g.resources
+GMap.NET.WindowsPresentation/obj/Release/GMap.NET.WindowsPresentation.csproj.GenerateResource.Cache
+GMap.NET.WindowsPresentation/obj/Release/GMap.NET.WindowsPresentation.Properties.Resources.resources
+GMap.NET.WindowsPresentation/obj/Release/TempPE/Properties.Resources.Designer.cs.dll

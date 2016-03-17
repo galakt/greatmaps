@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// This is my attempt to divide and conquer when searching the list. 
@@ -13,7 +12,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
    {
       private PointLatLng _topLeftBound;
       private PointLatLng _lowerRightBound;
-      List<PointLatLng> _list;
+      private List<PointLatLng> _list;
       private List<System.Threading.Thread> _threadTracking;
       private Object _threadLocker = new Object();
       private List<PointLatLng> _returnList;
@@ -36,7 +35,7 @@ namespace GMap.NET.WindowsPresentation.GHeat
       public IEnumerable<PointLatLng> GetMatchingPoints()
       {
          System.Threading.Thread newThread;
-         int split = _list.Count() / Environment.ProcessorCount;
+         int split = _list.Count / Environment.ProcessorCount;
          List<PointLatLng> tempList = new List<PointLatLng>();
 
          //Create a thread for every processor on the computer

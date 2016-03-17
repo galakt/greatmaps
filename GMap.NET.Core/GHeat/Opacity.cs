@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// Creates a zoom map

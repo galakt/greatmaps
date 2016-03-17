@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace GMap.NET.WindowsPresentation.GHeat
+namespace GMap.NET.GHeat
 {
    /// <summary>
    /// Gets a single tile
@@ -42,67 +42,72 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <returns></returns>
       public static Bitmap Generate(Bitmap colorScheme, Bitmap dot, int zoom, int tileX, int tileY, GPoint[] points, bool changeOpacityWithZoom, int defaultOpacity)
       {
-         int expandedWidth;
-         int expandedHeight;
-         int dotHalfSize;
-         int pad;
-
-         int x1;
-         int x2;
-         int y1;
-         int y2;
-
-         if (defaultOpacity < Opacity.TRANSPARENT || defaultOpacity > Opacity.OPAQUE)
-            throw new Exception("The default opacity of '" + defaultOpacity.ToString() + "' doesn't fall between '" + Opacity.TRANSPARENT.ToString() + "' and '" + Opacity.OPAQUE.ToString() + "'");
-
-         //Translate tile to pixel coords.
-         x1 = tileX * GHeat.SIZE;
-         x2 = x1 + 255;
-         y1 = tileY * GHeat.SIZE;
-         y2 = y1 + 255;
-
-         dotHalfSize = dot.Width;
-         pad = dotHalfSize;
-         int extraPad = dot.Width * 2;
-
-         //Expand bounds by one dot width.
-         x1 = x1 - extraPad;
-         x2 = x2 + extraPad;
-         y1 = y1 - extraPad;
-         y2 = y2 + extraPad;
-         expandedWidth = x2 - x1;
-         expandedHeight = y2 - y1;
-
-         Bitmap tile;
-         if (points.Length == 0)
+         lock (dot)
          {
-            if (changeOpacityWithZoom)
-               tile = GetEmptyTile(colorScheme, _zoomOpacity[zoom]);
+            int expandedWidth;
+            int expandedHeight;
+            int dotHalfSize;
+            int pad;
+
+            int x1;
+            int x2;
+            int y1;
+            int y2;
+
+            if (defaultOpacity < Opacity.TRANSPARENT || defaultOpacity > Opacity.OPAQUE)
+               throw new Exception("The default opacity of '" + defaultOpacity.ToString() + "' doesn't fall between '" +
+                                   Opacity.TRANSPARENT.ToString() + "' and '" + Opacity.OPAQUE.ToString() + "'");
+
+            //Translate tile to pixel coords.
+            x1 = tileX*GHeat.SIZE;
+            x2 = x1 + 255;
+            y1 = tileY*GHeat.SIZE;
+            y2 = y1 + 255;
+
+            dotHalfSize = dot.Width;
+            pad = dotHalfSize;
+            int extraPad = dot.Width*2;
+
+            //Expand bounds by one dot width.
+            x1 = x1 - extraPad;
+            x2 = x2 + extraPad;
+            y1 = y1 - extraPad;
+            y2 = y2 + extraPad;
+            expandedWidth = x2 - x1;
+            expandedHeight = y2 - y1;
+
+            Bitmap tile;
+            if (points.Length == 0)
+            {
+               if (changeOpacityWithZoom)
+                  tile = GetEmptyTile(colorScheme, _zoomOpacity[zoom]);
+               else
+                  tile = GetEmptyTile(colorScheme, defaultOpacity);
+            }
             else
-               tile = GetEmptyTile(colorScheme, defaultOpacity);
+            {
+               sw.Start();
+               tile = GetBlankImage(expandedHeight, expandedWidth);
+               sw.Stop();
+               Debug.WriteLine($"GetBlankImage = {sw.ElapsedMilliseconds} ms");
+               sw.Reset();
+               sw.Start();
+               tile = AddPoints(tile, dot, points);
+               sw.Stop();
+               Debug.WriteLine($"AddPoints = {sw.ElapsedMilliseconds} ms");
+               tile = Trim(tile, dot);
+               sw.Reset();
+               sw.Start();
+               if (changeOpacityWithZoom)
+                  tile = Colorize(tile, colorScheme, _zoomOpacity[zoom]);
+               else
+                  tile = Colorize(tile, colorScheme, defaultOpacity);
+               sw.Stop();
+               Debug.WriteLine($"Colorize = {sw.ElapsedMilliseconds} ms");
+            }
+
+            return tile;
          }
-         else
-         {
-            sw.Start();
-            tile = GetBlankImage(expandedHeight, expandedWidth);
-            sw.Stop();
-            Debug.WriteLine($"GetBlankImage = {sw.ElapsedMilliseconds} ms");
-            sw.Reset();
-            sw.Start();
-            tile = AddPoints(tile, dot, points);
-            sw.Stop();
-            Debug.WriteLine($"AddPoints = {sw.ElapsedMilliseconds} ms");
-            tile = Trim(tile, dot);
-            sw.Reset();
-            sw.Start();
-            if (changeOpacityWithZoom)
-               tile = Colorize(tile, colorScheme, _zoomOpacity[zoom]);
-            else
-               tile = Colorize(tile, colorScheme, defaultOpacity);
-            sw.Stop();
-            Debug.WriteLine($"Colorize = {sw.ElapsedMilliseconds} ms");
-         }
-         return tile;
       }
 
       /// <summary>
@@ -170,28 +175,34 @@ namespace GMap.NET.WindowsPresentation.GHeat
       /// <returns></returns>
       public static Bitmap AddPoints(Bitmap tile, Bitmap dot, GPoint[] points)
       {
-         ImageBlender blender = new ImageBlender();
-
-         for (int i = 0; i < points.Length; i++)
+         lock (tile)
          {
-            if (points[i].Weight.HasValue && points[i].Weight.Value == 0)
+            lock (dot)
             {
-               //Skip a value of zero, it scored so low it should not show up.
-            }
-            else
-            {
-               //Blend each dot to the existing images
-               blender.BlendImages(
-                           tile, // Destination Image
-                           (int)points[i].X + dot.Width, //Dest x
-                           (int)points[i].Y + dot.Width, //Dest y
-                           dot.Width, // Dest width
-                           dot.Height,  // Dest height
-                                        //If their is a weight then change the dot so it reflects that intensity
-                           points[i].Weight.HasValue ? ApplyWeightToImage(dot, points[i].Weight.Value) : dot, // Src Image
-                           0, // Src x
-                           0, // Src y
-                           ImageBlender.BlendOperation.Blend_Multiply);
+               ImageBlender blender = new ImageBlender();
+
+               for (int i = 0; i < points.Length; i++)
+               {
+                  if (points[i].Weight.HasValue && points[i].Weight.Value == 0)
+                  {
+                     //Skip a value of zero, it scored so low it should not show up.
+                  }
+                  else
+                  {
+                     //Blend each dot to the existing images
+                     blender.BlendImages(
+                        tile, // Destination Image
+                        (int) points[i].X + dot.Width, //Dest x
+                        (int) points[i].Y + dot.Width, //Dest y
+                        dot.Width, // Dest width
+                        dot.Height, // Dest height
+                        //If their is a weight then change the dot so it reflects that intensity
+                        points[i].Weight.HasValue ? ApplyWeightToImage(dot, points[i].Weight.Value) : dot, // Src Image
+                        0, // Src x
+                        0, // Src y
+                        ImageBlender.BlendOperation.Blend_Multiply);
+                  }
+               }
             }
          }
          return tile;
