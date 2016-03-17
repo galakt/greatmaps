@@ -15,6 +15,10 @@ namespace GMap.NET.WindowsPresentation.Providers.GHeat
       public GHeatMapProvider(IEnumerable<PointLatLng> points)
       {
          _points = points;
+         foreach (var pointLatLng in points)
+         {
+            _pointManager.AddPoint(pointLatLng);
+         }
       }
 
       #region GMapProvider Members

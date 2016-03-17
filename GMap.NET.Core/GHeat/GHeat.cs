@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -90,6 +91,7 @@ namespace GMap.NET.GHeat
       /// <returns></returns>
       public static Bitmap GetTile(PointManager pm, SchemeNames colorScheme, int zoom, int x, int y, bool newMethod, bool changeOpacityWithZoom, int defaultOpacity)
       {
+         Debug.WriteLine("GetTile");
          //Do a little error checking
          if (pm == null) throw new Exception("No point manager has been specified");
          return Tile.Generate(GetColorScheme(colorScheme), GetDot(zoom), zoom, x, y, pm.GetPointsForTile(x, y, GetDot(zoom), zoom, newMethod), changeOpacityWithZoom, defaultOpacity);
@@ -116,6 +118,7 @@ namespace GMap.NET.GHeat
       /// <returns></returns>
       private static Bitmap GetDot(int zoom)
       {
+         Debug.WriteLine("GetDot");
          var dot = _dotsList["dot" + zoom];
          lock (dot)
          {
@@ -130,6 +133,7 @@ namespace GMap.NET.GHeat
       /// <returns></returns>
       public static Bitmap GetColorScheme(SchemeNames schemeName)
       {
+         Debug.WriteLine("GetColorScheme");
          if (!_colorSchemeDictionary.ContainsKey(schemeName))
             throw new Exception("Color scheme '" + schemeName + " could not be found");
          var scheme = _colorSchemeDictionary[schemeName];

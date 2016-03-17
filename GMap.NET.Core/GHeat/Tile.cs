@@ -44,6 +44,7 @@ namespace GMap.NET.GHeat
       {
          lock (dot)
          {
+            Debug.WriteLine("Generate");
             int expandedWidth;
             int expandedHeight;
             int dotHalfSize;
@@ -77,6 +78,7 @@ namespace GMap.NET.GHeat
             expandedHeight = y2 - y1;
 
             Bitmap tile;
+            Debug.WriteLine($"points.Length = {points.Length}");
             if (points.Length == 0)
             {
                if (changeOpacityWithZoom)
