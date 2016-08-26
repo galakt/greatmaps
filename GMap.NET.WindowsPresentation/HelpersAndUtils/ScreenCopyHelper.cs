@@ -42,30 +42,22 @@ namespace GMap.NET.WindowsPresentation.HelpersAndUtils
             {
                bmpGraphics.CopyFromScreen(left, top, right, bottom, screenBmp.Size);
                return Imaging.CreateBitmapSourceFromHBitmap(
-                   screenBmp.GetHbitmap(),
-                   IntPtr.Zero,
-                   Int32Rect.Empty,
-                   BitmapSizeOptions.FromEmptyOptions());
+                  screenBmp.GetHbitmap(),
+                  IntPtr.Zero,
+                  Int32Rect.Empty,
+                  BitmapSizeOptions.FromEmptyOptions());
             }
          }
       }
 
       internal static Bitmap CopyScreenToBitmap(int left, int top, int right, int bottom)
       {
-         //using (var screenBmp = new Bitmap(right - left, bottom - top, PixelFormat.Format32bppArgb))
-         //{
          var screenBmp = new Bitmap(right - left, bottom - top, PixelFormat.Format32bppArgb);
-            using (var bmpGraphics = Graphics.FromImage(screenBmp))
-            {
-               bmpGraphics.CopyFromScreen(left, top, right, bottom, screenBmp.Size);
-               return screenBmp;
-               //return Imaging.CreateBitmapSourceFromHBitmap(
-               //    screenBmp.GetHbitmap(),
-               //    IntPtr.Zero,
-               //    Int32Rect.Empty,
-               //    BitmapSizeOptions.FromEmptyOptions());
-            }
-         //}
+         using (var bmpGraphics = Graphics.FromImage(screenBmp))
+         {
+            bmpGraphics.CopyFromScreen(left, top, right, bottom, screenBmp.Size);
+            return screenBmp;
+         }
       }
 
       internal static void PrintMap(int width, int height, Visual control)
@@ -80,7 +72,7 @@ namespace GMap.NET.WindowsPresentation.HelpersAndUtils
             height = 100;
          }
          RenderTargetBitmap renderTargetBitmap =
-    new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
          renderTargetBitmap.Render(control);
          PngBitmapEncoder pngImage = new PngBitmapEncoder();
          pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));

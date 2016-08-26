@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GMap.NET___Hot_Build</RootNamespace>
     <AssemblyName>GMap.NET</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>ImageReady.ico</ApplicationIcon>
     <IsWebBootstrapper>true</IsWebBootstrapper>
